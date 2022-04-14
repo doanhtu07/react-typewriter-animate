@@ -1,48 +1,28 @@
 {
-  "name": "react-typewriter-effect",
-  "description": "A React Typewriter that works on blocks of texts.",
-  "author": "Anh Tu Do",
-  "license": "MIT",
-  "keywords": [
-    "react",
-    "components",
-    "ui",
-    "effect"
-  ],
-  "version": "0.0.1",
-  "private": false,
-  "main": "dist/index.js",
-  "types": "dist/@types/index.d.ts",
-  "files": [
-    "dist",
-    "README.md"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/doanhtu07/react-typewriter-effect.git"
-  },
+  "name": "test-app",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@types/jest": "^27.0.1",
+    "@types/jquery": "^3.5.14",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0",
-    "@types/jquery": "^3.5.9",
     "@types/react-jss": "^10.0.0",
     "jquery": "^3.6.0",
-    "react-jss": "^10.9.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-jss": "^10.9.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.4.2",
+    "web-vitals": "^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "tsc",
-    "watch": "tsc -w",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
