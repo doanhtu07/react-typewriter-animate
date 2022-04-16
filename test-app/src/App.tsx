@@ -50,27 +50,28 @@ class App extends React.Component<Props> {
             defaultCursorColor="black"
             dataToRotate={[
               [
-                { type: "word", text: "Let's do this, guys!" },
+                { type: "word", text: "A simple" },
                 {
                   type: "action",
                   action: "delete",
-                  amount: "guys!".length
+                  amount: "simple".length
                 },
                 {
                   type: "word",
-                  text: "together!",
+                  text: "easy-to-use ",
                   spanClass: classes.blue,
                   cursorColor: "blue"
+                },
+                {
+                  type: "word",
+                  text: "React Typewriter"
                 }
               ],
               [
-                { type: "word", text: "For the " },
-                { type: "word", text: "world", spanClass: classes.green, cursorColor: "green" },
+                { type: "word", text: "Try it now" },
                 {
                   type: "word",
-                  text: "...",
-                  spanClass: classes.green,
-                  cursorColor: "green",
+                  text: "...!",
                   override: {
                     maxTypespeed: 600
                   }
