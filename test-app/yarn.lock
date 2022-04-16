@@ -7233,10 +7233,10 @@ react-scripts@5.0.1:
   optionalDependencies:
     fsevents "^2.3.2"
 
-react-typewriter-animate@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/react-typewriter-animate/-/react-typewriter-animate-0.0.2.tgz#0fe7e75bd4f6a5e77df0db6032e190f057446f15"
-  integrity sha512-92ZUgJiPALytDtESHDnK5Kg1S9eGDz8Avbq4yu7Slf+Mb6Lf1gLnFdCijTYJehlJxARjsiKZXZJFFIt1el8z8w==
+react-typewriter-animate@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-typewriter-animate/-/react-typewriter-animate-0.0.3.tgz#82f9c2adfd9b72501ecaff6f4759a579cb36bb1f"
+  integrity sha512-pdpsKsRFJmzryd0c7/OuAlGh/9g202swOJgB5TSIA2j+3v4RSfKL7bkbLTmUG/RjznxaFSmGZupVk4GNxMlR7A==
   dependencies:
     "@testing-library/jest-dom" "^5.14.1"
     "@testing-library/react" "^13.0.0"
