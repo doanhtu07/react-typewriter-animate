@@ -57,6 +57,7 @@ class Demo extends React.Components {
 | maxDeleteSpeed               | number                                       | 100ms              | Maximum deleting speed                                                                                                                      |
 | deleteVariance               | number                                       | 50ms               | Delete speed range = maxDeleteSpeed - deleteVariance -> maxDeleteSpeed. Delete speed of each character can vary randomly within this range. |
 | loop                         | boolean                                      | false              | Determine whether Typewriter should loop these banners or stop after the last banner.                                                       |
+| classes | Object | Default inside Typewriter | You can overwrite styles for Typewriter root (i.e, container), inner wrap, and any further child spans. See example below for default styles and available options to overwrite. |
 
 ## Options for WordBlock
 
@@ -227,6 +228,88 @@ class Example_Override_WordBlock extends React.Components {
     return {
       <div className="root">
         <Typewriter
+          defaultCursorColor="black"
+          dataToRotate={[
+            // Banner 1
+            [
+              { type: "word", text: "I'm typing fast until here" },
+              { type: "word", text: "...", override: { maxTypespeed: 600 } }
+            ],
+            // Banner 2
+            [
+              { type: "word", text: "I'm Anh Tu." }
+            ]
+          ]}
+        />
+      </div>
+    }
+  }
+}
+
+```
+  
+### Example with overwrite style object: classes
+
+```typescript
+
+import Typewriter from 'react-typewriter-animate';
+import './overwrite.css';
+  
+/**
+ *  Available options:
+ *  - container: string;
+ *  - blink: string;
+ *  - "@keyframes blink-caret": string;
+ *  
+ *  Default styles:
+ *
+ *  container: {
+ *    "--cursor-color": "black",
+ *    borderRight: "0.15em solid var(--cursor-color)",
+ *    transition: "border-right 0.2s"
+ *  },
+ *
+ *  blink: {
+ *    animation: "$blink-caret 0.9s step-end infinite"
+ *  },
+ *
+ *  "@keyframes blink-caret": {
+ *    "0%": {
+ *      borderColor: "transparent"
+ *    },
+ *    "50%": {
+ *      borderColor: "var(--cursor-color)"
+ *    }
+ *  }
+ */
+  
+/**
+ *  ./overwrite.css file:
+ *  
+ *  .typewriter-container-overwrite {
+ *    color: "white";
+ *    background-color: "blue";
+ *  }
+ *  
+ *  /* To select child elements, simply use CSS selectors. */
+ *  
+ *  /* You can do this: .overwrite-container-name > .wrap { css... }
+ *  /* Also this: .overwrite-container-name > .wrap > some-other-deeper-class { css... } */
+ *  
+ *  .typewriter-container-overwrite > .wrap {
+ *    color: "white";
+ *    background-color: "blue";
+ *  }
+ */
+
+class Example_Overwrite_Style extends React.Components {
+  render() {
+    return {
+      <div className="root">
+        <Typewriter
+          classes={{
+            container: "typewriter-container-overwrite"
+          }}
           defaultCursorColor="black"
           dataToRotate={[
             // Banner 1
