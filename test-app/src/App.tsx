@@ -9,6 +9,7 @@ const styles = {
     justifyContent: "center"
   },
   title: {
+    position: "relative",
     margin: "0",
     marginTop: "100px",
     lineHeight: "1.15",
@@ -20,19 +21,10 @@ const styles = {
   blue: {
     color: "blue"
   },
-  red: {
-    color: "red"
-  },
-  green: {
-    color: "green"
-  },
-  tourGuide: {
-    color: "#bb20ea",
-    textDecoration: "underline"
-  },
-  started: {
-    color: "#f6ce05",
-    fontStyle: "italic"
+  typewriter: {
+    "& > .wrap": {
+      color: "grey"
+    }
   }
 };
 
@@ -46,6 +38,9 @@ class App extends React.Component<Props> {
       <div className={classes.root}>
         <h1 className={classes.title}>
           <Typewriter
+            classes={{
+              container: classes.typewriter
+            }}
             loop
             defaultCursorColor="black"
             dataToRotate={[

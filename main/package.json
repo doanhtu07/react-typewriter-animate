@@ -46,7 +46,7 @@
     "watch": "tsc -w",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prepare": "yarn build"
+    "prepare": "rm ./dist && yarn build"
   },
   "eslintConfig": {
     "extends": [
