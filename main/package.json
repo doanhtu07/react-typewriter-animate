@@ -8,9 +8,13 @@
     "components",
     "ui",
     "react typewriter",
-    "react typewriter effect"
+    "react typewriter effect",
+    "typewriter",
+    "effect",
+    "animation",
+    "front-end"
   ],
-  "version": "0.0.4",
+  "version": "1.0.0",
   "private": false,
   "main": "dist/index.js",
   "types": "dist/@types/index.d.ts",

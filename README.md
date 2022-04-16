@@ -24,7 +24,7 @@ import Typewriter from 'react-typewriter-animate';
 
 class Demo extends React.Components {
   render() {
-    return {
+    return (
       <div>
         <Typewriter
           defaultCursorColor="black"
@@ -38,7 +38,7 @@ class Demo extends React.Components {
           ]}
         />
       </div>
-    }
+    )
   }
 }
 
