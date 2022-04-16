@@ -1,7 +1,7 @@
 import React from "react";
 import withStyles, { WithStylesProps } from "react-jss";
+import Typewriter from "react-typewriter-animate";
 import "./App.css";
-import Typewriter from "./lib";
 
 const styles = {
   root: {

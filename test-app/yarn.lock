@@ -1802,7 +1802,7 @@
     jest-matcher-utils "^27.0.0"
     pretty-format "^27.0.0"
 
-"@types/jquery@^3.5.14":
+"@types/jquery@^3.5.14", "@types/jquery@^3.5.9":
   version "3.5.14"
   resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.14.tgz#ac8e11ee591e94d4d58da602cb3a5a8320dee577"
   integrity sha512-X1gtMRMbziVQkErhTQmSe2jFwwENA/Zr+PprCkF63vFq+Yt5PZ4AlKqgmeNlwgn7dhsXEK888eIW2520EpC+xg==
@@ -7232,6 +7232,28 @@ react-scripts@5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
+
+react-typewriter-animate@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-typewriter-animate/-/react-typewriter-animate-0.0.2.tgz#0fe7e75bd4f6a5e77df0db6032e190f057446f15"
+  integrity sha512-92ZUgJiPALytDtESHDnK5Kg1S9eGDz8Avbq4yu7Slf+Mb6Lf1gLnFdCijTYJehlJxARjsiKZXZJFFIt1el8z8w==
+  dependencies:
+    "@testing-library/jest-dom" "^5.14.1"
+    "@testing-library/react" "^13.0.0"
+    "@testing-library/user-event" "^13.2.1"
+    "@types/jest" "^27.0.1"
+    "@types/jquery" "^3.5.9"
+    "@types/node" "^16.7.13"
+    "@types/react" "^18.0.0"
+    "@types/react-dom" "^18.0.0"
+    "@types/react-jss" "^10.0.0"
+    jquery "^3.6.0"
+    react "^18.0.0"
+    react-dom "^18.0.0"
+    react-jss "^10.9.0"
+    react-scripts "5.0.1"
+    typescript "^4.4.2"
+    web-vitals "^2.1.0"
 
 react@^18.0.0:
   version "18.0.0"
