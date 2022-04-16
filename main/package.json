@@ -15,7 +15,7 @@
   "types": "dist/@types/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "../README.md"
   ],
   "repository": {
     "type": "git",
