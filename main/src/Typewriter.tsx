@@ -1,7 +1,10 @@
-import $ from "jquery";
 import React from "react";
 import withStyles, { WithStylesProps } from "react-jss";
-import { insertAt, removeChar } from "./utils";
+import { handleAction } from "./helpers/handleAction";
+import { resetPack } from "./helpers/handleLifeCycle";
+import { handleWord } from "./helpers/handleWord";
+import { PackInfo, TypewriterProps } from "./types";
+import { deepCopyData } from "./utils";
 
 const styles = () => ({
   container: {
@@ -23,207 +26,90 @@ const styles = () => ({
   }
 });
 
+export type ComposedTypewriterProps = WithStylesProps<typeof styles> & TypewriterProps;
+
 // https://css-tricks.com/snippets/css/typewriter-effect/
 
-type Props = WithStylesProps<typeof styles> & {
-  defaultCursorColor: string;
-  dataToRotate: string[][][]; // E.g: [["A"], ["BC", span css class without < or >, cursor color]]
-  timeBeforeDelete: number;
-  typeSpeed?: number;
-};
+class Typewriter extends React.Component<ComposedTypewriterProps> {
+  mPack: PackInfo = {
+    containerRef: React.createRef<HTMLSpanElement>(),
 
-class Typewriter extends React.Component<Props> {
-  mContainerRef = React.createRef<HTMLSpanElement>();
+    // Since we want to support deleting, we must have a copy data and perform delete on it. We will restore original data after rotate through all data.
+    copyDataToRotate: deepCopyData(this.props.dataToRotate),
 
-  mInternalBlockPointer = 0; // Point at characters of text at index 0 inside a block
-  mBlockPointer = 0; // Point at the whole block showing where we are
-  mHTMLPointer = 0; // Insert/Delete exactly at this point then move pointer up/down
+    internalBlockPointer: 0, // Point at characters of text at index 0 inside a block
+    blockPointer: 0, // Point at the whole block showing where we are
+    HTMLPointer: 0, // Insert/Delete exactly at this point then move pointer up/down
 
-  mCurrentHTML = "";
-  mCurrentDataRotateIndex = 0;
-  mIsDeleting = false;
+    currentHTML: "",
+    currentDataRotateIndex: 0,
+    isDeleting: false,
 
-  mTimeoutTick = -1;
+    deleteCache: {
+      original_internalBlockPointer: -1,
+      original_blockPointer: -1
+    },
+
+    timeoutTick: -1 // Remain the same even after reseting
+  };
 
   componentDidMount() {
     this.tick();
   }
 
   componentWillUnmount() {
-    this.mInternalBlockPointer = 0;
-    this.mBlockPointer = 0;
-    this.mHTMLPointer = 0;
-
-    this.mCurrentHTML = "";
-    this.mCurrentDataRotateIndex = 0;
-    this.mIsDeleting = false;
-
-    window.clearTimeout(this.mTimeoutTick);
+    resetPack(this.mPack);
+    window.clearTimeout(this.mPack.timeoutTick);
   }
 
   tick() {
-    const { current: containerCurrent } = this.mContainerRef;
-    const { classes, defaultCursorColor, dataToRotate, timeBeforeDelete, typeSpeed } = this.props;
+    const rotateDataIndex = this.mPack.currentDataRotateIndex % this.mPack.copyDataToRotate.length;
+    const textBlocks = this.mPack.copyDataToRotate[rotateDataIndex];
 
-    if (!containerCurrent) {
-      return;
-    }
+    let currentBlock = textBlocks[this.mPack.blockPointer];
 
-    const rotateDataIndex = this.mCurrentDataRotateIndex % dataToRotate.length;
-    const textBlocks = dataToRotate[rotateDataIndex];
-    const currentBlock = textBlocks[this.mBlockPointer];
+    // *** Handle action ***
+    if (currentBlock && currentBlock.type === "action") {
+      /**
+       * If deleting (i.e: Currently traversing blocks from right to left):
+       * - Don't even care about actions
+       * - Move to previous block
+       *    - Case 1: If previous block is WordBlock => Don't forget to set internal block pointer
+       *    - Case 2: If block pointer is now out of bound => This means we have finished deleting everything => Move to next data array
+       * - Call tick again to handle this new block
+       */
+      if (this.mPack.isDeleting) {
+        this.mPack.blockPointer--;
 
-    // Set cursor color
-    this.setCursorColor(containerCurrent, currentBlock, defaultCursorColor);
-
-    // Adding
-    if (!this.mIsDeleting) {
-      this.add(textBlocks, currentBlock);
-    }
-
-    // Deleting
-    else {
-      this.delete(textBlocks, currentBlock);
-    }
-
-    containerCurrent.innerHTML = '<span class="wrap">' + this.mCurrentHTML + "</span>";
-
-    // Setting up wait time for typing
-
-    let waitTime = typeSpeed ? typeSpeed - Math.random() * (typeSpeed - 100) : 200 - Math.random() * 100; // Range: 100 -> 200 ms
-
-    // Still deleting
-    if (this.mIsDeleting && this.mCurrentHTML !== "") {
-      waitTime /= 2;
-    }
-
-    // Finish deleting the whole current data
-    if (this.mIsDeleting && this.mCurrentHTML === "") {
-      this.mInternalBlockPointer = 0; // Point at characters of text at index 0 inside a block
-      this.mBlockPointer = 0; // Point at the whole block showing where we are
-      this.mHTMLPointer = 0; // Insert/Delete exactly at this point then move pointer up/down
-
-      this.mIsDeleting = false;
-      this.mCurrentDataRotateIndex++; // Check out next data
-
-      waitTime = 500;
-    }
-
-    // Finish typing the whole current data
-    if (
-      !this.mIsDeleting &&
-      this.mBlockPointer === textBlocks.length - 1 &&
-      this.mInternalBlockPointer === currentBlock[0].length
-    ) {
-      this.mInternalBlockPointer--;
-      this.mIsDeleting = true;
-
-      $(containerCurrent).addClass(classes.blink);
-
-      waitTime = timeBeforeDelete;
-    }
-
-    this.mTimeoutTick = window.setTimeout(() => {
-      $(containerCurrent).removeClass(classes.blink);
-      this.tick();
-    }, waitTime);
-  }
-
-  // Helpers
-
-  setCursorColor = (containerCurrent: HTMLSpanElement, currentBlock: string[], defaultCursorColor: string) => {
-    if (currentBlock.length >= 3) {
-      const cursorColor = currentBlock[2];
-
-      if (cursorColor === "") {
-        containerCurrent.style.setProperty("--cursor-color", defaultCursorColor);
-      } else {
-        containerCurrent.style.setProperty("--cursor-color", cursorColor);
-      }
-    } else {
-      containerCurrent.style.setProperty("--cursor-color", defaultCursorColor);
-    }
-  };
-
-  add = (textBlocks: string[][], currentBlock: string[]) => {
-    // Check if need span and internal block pointer is pointing at first letter: Add SPAN, move html pointer
-    if (currentBlock.length !== 1 && this.mInternalBlockPointer === 0) {
-      const cssClass = currentBlock[1];
-
-      // E.g: <span id="id"></span>
-      this.mCurrentHTML += `<span class="${cssClass}"></span>`;
-
-      this.mHTMLPointer += `span class="${cssClass}"><`.length;
-    }
-
-    const text = currentBlock[0];
-    const char = text[this.mInternalBlockPointer];
-
-    this.mCurrentHTML = insertAt(this.mCurrentHTML, char, this.mHTMLPointer);
-
-    this.mInternalBlockPointer++;
-    this.mHTMLPointer++;
-
-    // This means we finish adding text inside block: move html pointer out of SPAN (if applicable), move to next block, reset internal block pointer
-    if (this.mInternalBlockPointer === text.length) {
-      if (currentBlock.length !== 1) {
-        this.mHTMLPointer += `/span> `.length;
-      }
-
-      // Reset block pointer and internal block pointer if block pointer is not pointing to the last block
-      if (this.mBlockPointer < textBlocks.length - 1) {
-        this.mBlockPointer++;
-        this.mInternalBlockPointer = 0;
-      }
-    }
-  };
-
-  delete = (textBlocks: string[][], currentBlock: string[]) => {
-    // Check if current block has span and internal block pointer is pointing at last letter: move html pointer
-    if (currentBlock.length !== 1 && this.mInternalBlockPointer === currentBlock[0].length - 1) {
-      // Find start of ending span tag
-      while (this.mCurrentHTML[this.mHTMLPointer] !== "<") {
-        this.mHTMLPointer--;
-      }
-      this.mHTMLPointer--;
-    }
-
-    this.mCurrentHTML = removeChar(this.mCurrentHTML, this.mHTMLPointer);
-
-    this.mInternalBlockPointer--;
-    this.mHTMLPointer--;
-
-    // This means we finish deleting text inside block: move html pointer in front of SPAN (if applicable), move to previous block, reset internal block pointer
-    if (this.mInternalBlockPointer === -1) {
-      if (currentBlock.length !== 1) {
-        // Find start of starting span tag
-        while (this.mCurrentHTML[this.mHTMLPointer] !== "<") {
-          this.mHTMLPointer--;
+        // Case 1
+        currentBlock = textBlocks[this.mPack.blockPointer];
+        if (currentBlock.type === "word") {
+          this.mPack.internalBlockPointer = currentBlock.text.length - 1;
         }
-        this.mHTMLPointer--;
 
-        // Delete the whole span. Keep things previous to that span.
-        this.mCurrentHTML = this.mCurrentHTML.substring(0, this.mHTMLPointer + 1);
+        // Case 2
+        if (this.mPack.blockPointer === -1) {
+          this.mPack.currentDataRotateIndex++;
+        }
+
+        this.tick();
+        return;
       }
 
-      // Reset block pointer and internal block pointer if block pointer is not pointing to the first block
-      if (this.mBlockPointer > 0) {
-        this.mBlockPointer--;
-        const newBlock = textBlocks[this.mBlockPointer];
-        this.mInternalBlockPointer = newBlock[0].length - 1;
-      }
-      // If it's first block already and we have deleted it all, move internal block to 0
-      else {
-        this.mInternalBlockPointer++;
-      }
+      handleAction(this.props, this.mPack, () => this.tick());
     }
-  };
+
+    // *** Handle word / out-of-bound block ***
+    else {
+      handleWord(this.props, this.mPack, () => this.tick());
+    }
+  }
 
   render() {
     const { classes } = this.props;
-    const { mContainerRef } = this;
+    const { containerRef } = this.mPack;
 
-    return <span ref={mContainerRef} className={classes.container}></span>;
+    return <span ref={containerRef} className={classes.container}></span>;
   }
 }
 

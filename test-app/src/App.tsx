@@ -17,8 +17,14 @@ const styles = () => ({
     display: "table",
     textAlign: "center"
   },
-  anh_tu_do: {
+  blue: {
     color: "blue"
+  },
+  red: {
+    color: "red"
+  },
+  green: {
+    color: "green"
   },
   tourGuide: {
     color: "#bb20ea",
@@ -40,14 +46,39 @@ class App extends React.Component<Props> {
       <div className={classes.root}>
         <h1 className={classes.title}>
           <Typewriter
+            loop
             defaultCursorColor="black"
             dataToRotate={[
-              [["Welcome aboard!"]],
-              [["I'm "], ["Anh Tu Do", classes.anh_tu_do, "blue"]],
-              [["...your "], ["tour guide", classes.tourGuide, "#bb20ea"], [" today."]],
-              [["Let get us "], ["started!", classes.started, "#f6ce05"]]
+              [
+                { type: "word", text: "Let's do this, guys!" },
+                {
+                  type: "action",
+                  action: "delete",
+                  amount: "guys!".length
+                },
+                {
+                  type: "word",
+                  text: "together!",
+                  spanClass: classes.blue,
+                  cursorColor: "blue"
+                }
+              ],
+              [
+                { type: "word", text: "For the " },
+                { type: "word", text: "world", spanClass: classes.green, cursorColor: "green" },
+                {
+                  type: "word",
+                  text: "...",
+                  spanClass: classes.green,
+                  cursorColor: "green",
+                  override: {
+                    maxTypespeed: 600
+                  }
+                }
+              ]
             ]}
-            typeSpeed={120}
+            maxTypeSpeed={150}
+            maxDeleteSpeed={100}
             timeBeforeDelete={1300}
           />
         </h1>
