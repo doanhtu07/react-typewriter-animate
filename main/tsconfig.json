@@ -1,26 +1,33 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "rootDir": "src",
+    "outDir": "dist",
+    "target": "es6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+
+    "module": "commonjs",
+    "sourceMap": true,
+
+    "strict": true,
     "allowJs": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "jsx": "react-jsx",
+
+    // https://stackoverflow.com/questions/31322525/confusing-duplicate-identifier-typescript-error-message
+    "skipLibCheck": true,
+
+    // Ensure that .d.ts files are created by tsc, but not .js files
+    "declaration": true,
+    // Ensure that Babel can safely transpile files in the TypeScript project
     "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "declarationDir": "dist/@types"
   },
-  "include": [
-    "src"
-  ]
+
+  "include": ["src"],
+
+  "exclude": ["node_modules", "node_modules/@types", "dist"]
 }
