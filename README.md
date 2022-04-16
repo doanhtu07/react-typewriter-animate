@@ -1,5 +1,9 @@
 # React Typewriter Animate
 
+## Useful Links
+
+- [NPM Repo](https://www.npmjs.com/package/react-typewriter-animate)
+
 ## Installation
 
 `npm install react-typewriter-animate`
