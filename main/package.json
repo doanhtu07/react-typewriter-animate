@@ -1,5 +1,5 @@
 {
-  "name": "react-typewriter-effect",
+  "name": "react-typewriter-animate",
   "description": "A React Typewriter that works on blocks of texts.",
   "author": "Anh Tu Do",
   "license": "MIT",
@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/doanhtu07/react-typewriter-effect.git"
+    "url": "git+https://github.com/doanhtu07/react-typewriter-animate.git"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
