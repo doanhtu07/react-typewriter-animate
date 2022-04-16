@@ -1,5 +1,7 @@
 # React Typewriter Animate
 
+![banner](https://user-images.githubusercontent.com/55064969/163668440-8aead1df-3774-4de6-b208-94c6396b5e46.gif)
+
 ## Useful Links
 
 - [NPM Repo](https://www.npmjs.com/package/react-typewriter-animate)
