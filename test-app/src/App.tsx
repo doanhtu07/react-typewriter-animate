@@ -3,7 +3,7 @@ import withStyles, { WithStylesProps } from "react-jss";
 import "./App.css";
 import Typewriter from "./lib";
 
-const styles = () => ({
+const styles = {
   root: {
     display: "flex",
     justifyContent: "center"
@@ -34,7 +34,7 @@ const styles = () => ({
     color: "#f6ce05",
     fontStyle: "italic"
   }
-});
+};
 
 type Props = WithStylesProps<typeof styles>;
 

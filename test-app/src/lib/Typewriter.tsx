@@ -6,7 +6,7 @@ import { handleWord } from "./helpers/handleWord";
 import { PackInfo, TypewriterProps } from "./types";
 import { deepCopyData } from "./utils";
 
-const styles = () => ({
+const styles = {
   container: {
     "--cursor-color": "black",
     borderRight: "0.15em solid var(--cursor-color)",
@@ -24,7 +24,7 @@ const styles = () => ({
       borderColor: "var(--cursor-color)"
     }
   }
-});
+};
 
 export type ComposedTypewriterProps = WithStylesProps<typeof styles> & TypewriterProps;
 
