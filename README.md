@@ -5,6 +5,9 @@
 ## Useful Links
 
 - [NPM Repo](https://www.npmjs.com/package/react-typewriter-animate)
+- [CodeSandbox Demo](https://codesandbox.io/s/test-react-typewriter-animate-zkxyjt)
+
+**Note: Examples are written far below.**
 
 ## Installation
 
@@ -168,40 +171,7 @@ class Example_Delete extends React.Components {
                 cursorColor: "blue",
               },
               { type: "action", action: "delete", amount: "up?".length },
-              { type: "word", text: "guys?" },
-            ],
-            // Banner 2
-            [{ type: "word", text: "I'm Anh Tu." }],
-          ]}
-        />
-      </div>
-    );
-  }
-}
-```
-
-### Example with delete
-
-```typescript
-import Typewriter from "react-typewriter-animate";
-
-class Example_Delete extends React.Components {
-  render() {
-    return (
-      <div className="root">
-        <Typewriter
-          defaultCursorColor="black"
-          dataToRotate={[
-            // Banner 1
-            [
-              {
-                type: "word",
-                text: "What's up?",
-                spanClass: "css-class-name",
-                cursorColor: "blue",
-              },
-              { type: "action", action: "delete", amount: "up?".length },
-              { type: "word", text: "guys?" },
+              { type: "word", text: "going on, guys?" },
             ],
             // Banner 2
             [{ type: "word", text: "I'm Anh Tu." }],
