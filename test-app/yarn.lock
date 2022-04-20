@@ -7238,27 +7238,17 @@ react-scripts@5.0.1:
   optionalDependencies:
     fsevents "^2.3.2"
 
-react-typewriter-animate@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/react-typewriter-animate/-/react-typewriter-animate-0.0.3.tgz#82f9c2adfd9b72501ecaff6f4759a579cb36bb1f"
-  integrity sha512-pdpsKsRFJmzryd0c7/OuAlGh/9g202swOJgB5TSIA2j+3v4RSfKL7bkbLTmUG/RjznxaFSmGZupVk4GNxMlR7A==
+react-typewriter-animate@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-typewriter-animate/-/react-typewriter-animate-1.1.2.tgz#9fe7fb88545887b8a0315293ef06318c0354eef8"
+  integrity sha512-kzbtMDI11ZW3fJIGNNlHNhpj2N/ORt4I9DbLTHQ/foP+efQxcIeMxhicR/ZCdhxDFm+/vx6/O3O+bCDHfX006Q==
   dependencies:
-    "@testing-library/jest-dom" "^5.14.1"
-    "@testing-library/react" "^13.0.0"
-    "@testing-library/user-event" "^13.2.1"
-    "@types/jest" "^27.0.1"
     "@types/jquery" "^3.5.9"
-    "@types/node" "^16.7.13"
-    "@types/react" "^18.0.0"
-    "@types/react-dom" "^18.0.0"
-    "@types/react-jss" "^10.0.0"
+    clsx "^1.1.1"
     jquery "^3.6.0"
     react "^18.0.0"
     react-dom "^18.0.0"
-    react-jss "^10.9.0"
-    react-scripts "5.0.1"
     typescript "^4.4.2"
-    web-vitals "^2.1.0"
 
 react@^18.0.0:
   version "18.0.0"
