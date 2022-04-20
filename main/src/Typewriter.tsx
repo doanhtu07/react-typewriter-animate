@@ -4,7 +4,6 @@ import { handleAction } from "./helpers/handleAction";
 import { resetPack } from "./helpers/handleLifeCycle";
 import { handleWord } from "./helpers/handleWord";
 import { PackInfo, TypewriterClassNames, TypewriterProps } from "./types";
-import "./Typewriter.css";
 import { deepCopyData } from "./utils";
 
 export type ComposedTypewriterProps = TypewriterProps;

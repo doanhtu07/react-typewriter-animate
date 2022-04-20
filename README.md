@@ -11,8 +11,8 @@
 
 ## Breaking Changes
 
-In **^1.1.0**, there are errors. Thus, this version should not be used.
-In **^1.1.1**, I have changed from using react-jss to bare css for styling Typewriter. Thus, overwriting styles is changed.
+In **^1.1.0** to **^1.1.1**, Typewriter has errors and might not work in all cases.
+In **^1.1.2**, I have changed from using react-jss to bare css for styling Typewriter. Thus, overwriting styles is changed.
 
 ## Installation
 
@@ -27,6 +27,7 @@ or
 ```typescript
 
 import Typewriter from 'react-typewriter-animate';
+import "react-typewriter-animate/dist/Typewriter.css";
 
 ...
 
@@ -107,6 +108,7 @@ override?: {
 
 ```typescript
 import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
 
 class BasicExample extends React.Components {
   render() {
@@ -132,6 +134,7 @@ class BasicExample extends React.Components {
 ```typescript
 
 import Typewriter from 'react-typewriter-animate';
+import "react-typewriter-animate/dist/Typewriter.css";
 
 class Example_Styled_WordBlock extends React.Components {
   render() {
@@ -162,6 +165,7 @@ class Example_Styled_WordBlock extends React.Components {
 
 ```typescript
 import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
 
 class Example_Delete extends React.Components {
   render() {
@@ -195,6 +199,7 @@ class Example_Delete extends React.Components {
 
 ```typescript
 import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
 
 class Example_Override_WordBlock extends React.Components {
   render() {
@@ -222,6 +227,7 @@ class Example_Override_WordBlock extends React.Components {
 
 ```typescript
 import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
 import "./overwrite.css";
 
 /**
