@@ -1,5 +1,5 @@
 import $ from "jquery";
-import { PackInfo, WordBlock } from "../../types";
+import { PackInfo, TypewriterClassNames, WordBlock } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
 import { deepCopyData } from "../../utils";
 import { addChar } from "./addChar";
@@ -8,8 +8,6 @@ import { moveToPreviousNonEmptyWordBlock, setCursorColor } from "./helpers";
 
 export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void) => {
   const {
-    classes,
-
     defaultCursorColor,
 
     typeVariance,
@@ -25,8 +23,9 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
   } = props;
 
   const { current: containerCurrent } = pack.containerRef;
+  const { current: contentCurrent } = pack.contentRef;
 
-  if (!containerCurrent) {
+  if (!containerCurrent || !contentCurrent) {
     return;
   }
 
@@ -51,7 +50,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
    */
   if (pack.isDeleting && pack.blockPointer === -1) {
     // Blink
-    $(containerCurrent).addClass(classes.blink);
+    $(containerCurrent).addClass(TypewriterClassNames.Blink);
 
     // Reset necessary variables
     pack.internalBlockPointer = 0;
@@ -70,7 +69,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
 
     pack.timeoutTick = window.setTimeout(() => {
       // Stop blinking
-      $(containerCurrent).removeClass(classes.blink);
+      $(containerCurrent).removeClass(TypewriterClassNames.Blink);
       moveOn();
     }, waitTime);
 
@@ -115,7 +114,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
   }
 
   // *** Update HTML ***
-  containerCurrent.innerHTML = '<span class="wrap">' + pack.currentHTML + "</span>";
+  contentCurrent.innerHTML = pack.currentHTML;
 
   let waitTime = 0;
 
@@ -160,7 +159,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
    */
   if (!pack.isDeleting && pack.blockPointer === textBlocks.length) {
     // Blink
-    $(containerCurrent).addClass(classes.blink);
+    $(containerCurrent).addClass(TypewriterClassNames.Blink);
 
     // Check loop and if it is last data to rotate
     if (!loop && pack.currentDataRotateIndex === pack.copyDataToRotate.length - 1) {
@@ -177,7 +176,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
 
   pack.timeoutTick = window.setTimeout(() => {
     // Stop blinking
-    $(containerCurrent).removeClass(classes.blink);
+    $(containerCurrent).removeClass(TypewriterClassNames.Blink);
     moveOn();
   }, waitTime);
 };

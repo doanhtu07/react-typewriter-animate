@@ -1,3 +1,5 @@
+import React from "react";
+
 export type WordBlock = {
   type: "word";
   text: string;
@@ -22,6 +24,7 @@ export type ActionBlock = {
 
 export type PackInfo = {
   containerRef: React.RefObject<HTMLSpanElement>;
+  contentRef: React.RefObject<HTMLSpanElement>;
 
   copyDataToRotate: (WordBlock | ActionBlock)[][];
 
@@ -56,4 +59,14 @@ export type TypewriterProps = {
   deleteVariance?: number; // Default 50ms
 
   loop?: boolean;
+
+  containerClass?: string;
+  contentClass?: string;
 };
+
+export enum TypewriterClassNames {
+  Container = "Typewriter-container",
+  Content = "Typewriter-content",
+  Blink = "Typewriter-blink",
+  Blink_Caret = "Typewriter-blink-caret"
+}

@@ -7,9 +7,11 @@ import { moveToPreviousNonEmptyWordBlock, setCursorColor } from "../handleWord/h
 
 export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void, amount: number) => {
   const { defaultCursorColor, deleteVariance, maxDeleteSpeed } = props;
-  const { current: containerCurrent } = pack.containerRef;
 
-  if (!containerCurrent) {
+  const { current: containerCurrent } = pack.containerRef;
+  const { current: contentCurrent } = pack.contentRef;
+
+  if (!containerCurrent || !contentCurrent) {
     return;
   }
 
@@ -70,7 +72,7 @@ export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, mov
   newBlock.text = newBlock.text.substring(0, newBlock.text.length - 1);
 
   // *** Update HTML ***
-  containerCurrent.innerHTML = '<span class="wrap">' + pack.currentHTML + "</span>";
+  contentCurrent.innerHTML = pack.currentHTML;
 
   let waitTime = 0;
 
@@ -121,12 +123,11 @@ const prepareToMoveOn = (pack: PackInfo) => {
     pack.isDeleting = true;
     pack.HTMLPointer--;
   } else {
-
-  /**
-   *  Else:
-   *  - Move block pointer forward to check next block
-   *  - Set internal block pointer to 0 (in case next block is a WordBlock)
-   */
+    /**
+     *  Else:
+     *  - Move block pointer forward to check next block
+     *  - Set internal block pointer to 0 (in case next block is a WordBlock)
+     */
     pack.blockPointer++;
     pack.internalBlockPointer = 0;
   }

@@ -49,18 +49,21 @@ class Demo extends React.Components {
 
 ## Options for Typewriter
 
-| Name                         | Type                                         | Required / Default        | Purpose                                                                                                                                                                          |
-| ---------------------------- | -------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| dataToRotate                 | Array of arrays of (WordBlock / ActionBlock) | Required                  | This is the array of all data (i.e banners) to type out. Each banner is a small array of WordBlock's and ActionBlock's                                                           |
-| defaultCursorColor           | string                                       | Required                  | Set default color for cursor of Typewriter. A CSS string for color. E.g: red, #ffffff, rgb(0,0,0), var(--color-variable)                                                         |
-| timeBeforeDelete             | number                                       | 1000ms                    | Wait time before deleting a banner after finish typing the whole banner                                                                                                          |
-| timeBeforeWriteNewRotateData | number                                       | 500ms                     | Wait time before typing next banner                                                                                                                                              |
-| maxTypeSpeed                 | number                                       | 200ms                     | Maximum typing speed                                                                                                                                                             |
-| typeVariance                 | number                                       | 100ms                     | Type speed range = maxTypespeed - typeVariance -> maxTypespeed. Type speed of each character can vary randomly within this range.                                                |
-| maxDeleteSpeed               | number                                       | 100ms                     | Maximum deleting speed                                                                                                                                                           |
-| deleteVariance               | number                                       | 50ms                      | Delete speed range = maxDeleteSpeed - deleteVariance -> maxDeleteSpeed. Delete speed of each character can vary randomly within this range.                                      |
-| loop                         | boolean                                      | false                     | Determine whether Typewriter should loop these banners or stop after the last banner.                                                                                            |
-| classes                      | Object                                       | Default inside Typewriter | You can overwrite styles for Typewriter root (i.e, container), inner wrap, and any further child spans. See example below for default styles and available options to overwrite. |
+| Name                         | Type                                         | Required / Default             | Purpose                                                                                                                                     |
+| ---------------------------- | -------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| dataToRotate                 | Array of arrays of (WordBlock / ActionBlock) | Required                       | This is the array of all data (i.e banners) to type out. Each banner is a small array of WordBlock's and ActionBlock's                      |
+| defaultCursorColor           | string                                       | Required                       | Set default color for cursor of Typewriter. A CSS string for color. E.g: red, #ffffff, rgb(0,0,0), var(--color-variable)                    |
+| timeBeforeDelete             | number                                       | 1000ms                         | Wait time before deleting a banner after finish typing the whole banner                                                                     |
+| timeBeforeWriteNewRotateData | number                                       | 500ms                          | Wait time before typing next banner                                                                                                         |
+| maxTypeSpeed                 | number                                       | 200ms                          | Maximum typing speed                                                                                                                        |
+| typeVariance                 | number                                       | 100ms                          | Type speed range = maxTypespeed - typeVariance -> maxTypespeed. Type speed of each character can vary randomly within this range.           |
+| maxDeleteSpeed               | number                                       | 100ms                          | Maximum deleting speed                                                                                                                      |
+| deleteVariance               | number                                       | 50ms                           | Delete speed range = maxDeleteSpeed - deleteVariance -> maxDeleteSpeed. Delete speed of each character can vary randomly within this range. |
+| loop                         | boolean                                      | false                          | Determine whether Typewriter should loop these banners or stop after the last banner.                                                       |
+| containerClass               | string                                       | Default styles from Typewriter | Overwrite default styles of Typewriter-container                                                                                            |
+| contentClass                 | string                                       | Default styles from Typewriter | Overwrite default styles of Typewriter-content                                                                                              |
+
+**Note: You can access the class name keywords safely through TypewriterClassNames exported from the package.**
 
 ## Options for WordBlock
 
@@ -217,29 +220,24 @@ import Typewriter from "react-typewriter-animate";
 import "./overwrite.css";
 
 /**
- *  Available options:
- *  - container: string;
- *  - blink: string;
- *  - "@keyframes blink-caret": string;
- *
  *  Default styles:
  *
- *  container: {
- *    "--cursor-color": "black",
- *    borderRight: "0.15em solid var(--cursor-color)",
- *    transition: "border-right 0.2s"
+ *  .Typewriter-container {
+ *     --cursor-color: black;
+ *     border-right: 0.15em solid var(--cursor-color);
+ *     transition: border-right 0.2s;
+ *  }
+ *
+ *  .Typewriter-blink {
+ *    animation: Typewriter-blink-caret 0.9s step-end infinite;
  *  },
  *
- *  blink: {
- *    animation: "$blink-caret 0.9s step-end infinite"
- *  },
- *
- *  "@keyframes blink-caret": {
- *    "0%": {
- *      borderColor: "transparent"
- *    },
- *    "50%": {
- *      borderColor: "var(--cursor-color)"
+ *  @keyframes Typewriter-blink-caret {
+ *    0%: {
+ *      border-color: transparent;
+ *    }
+ *    50%: {
+ *      border-color: var(--cursor-color);
  *    }
  *  }
  */
@@ -251,15 +249,6 @@ import "./overwrite.css";
  *    color: "white";
  *    background-color: "blue";
  *  }
- *
- *  - To select child elements, simply use CSS selectors.
- *  - You can do this: .overwrite-container-name > .wrap { css... }
- *  - Also this: .overwrite-container-name > .wrap > some-other-deeper-class { css... }
- *
- *  .typewriter-container-overwrite > .wrap {
- *    color: "white";
- *    background-color: "blue";
- *  }
  */
 
 class Example_Overwrite_Style extends React.Components {
@@ -267,9 +256,7 @@ class Example_Overwrite_Style extends React.Components {
     return (
       <div className="root">
         <Typewriter
-          classes={{
-            container: "typewriter-container-overwrite"
-          }}
+          containerClass="typewriter-container-overwrite"
           defaultCursorColor="black"
           dataToRotate={[
             // Banner 1

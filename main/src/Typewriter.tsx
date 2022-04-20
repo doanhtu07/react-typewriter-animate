@@ -1,38 +1,20 @@
+import clsx from "clsx";
 import React from "react";
-import withStyles, { WithStylesProps } from "react-jss";
 import { handleAction } from "./helpers/handleAction";
 import { resetPack } from "./helpers/handleLifeCycle";
 import { handleWord } from "./helpers/handleWord";
-import { PackInfo, TypewriterProps } from "./types";
+import { PackInfo, TypewriterClassNames, TypewriterProps } from "./types";
+import "./Typewriter.css";
 import { deepCopyData } from "./utils";
 
-const styles = {
-  container: {
-    "--cursor-color": "black",
-    borderRight: "0.15em solid var(--cursor-color)",
-    transition: "border-right 0.2s"
-  },
-  blink: {
-    animation: "$blink-caret 0.9s step-end infinite"
-  },
-  // https://github.com/mui/material-ui/issues/13793
-  "@keyframes blink-caret": {
-    "0%": {
-      borderColor: "transparent"
-    },
-    "50%": {
-      borderColor: "var(--cursor-color)"
-    }
-  }
-};
-
-export type ComposedTypewriterProps = WithStylesProps<typeof styles> & TypewriterProps;
+export type ComposedTypewriterProps = TypewriterProps;
 
 // https://css-tricks.com/snippets/css/typewriter-effect/
 
 class Typewriter extends React.Component<ComposedTypewriterProps> {
   mPack: PackInfo = {
     containerRef: React.createRef<HTMLSpanElement>(),
+    contentRef: React.createRef<HTMLSpanElement>(),
 
     // Since we want to support deleting, we must have a copy data and perform delete on it. We will restore original data after rotate through all data.
     copyDataToRotate: deepCopyData(this.props.dataToRotate),
@@ -106,11 +88,15 @@ class Typewriter extends React.Component<ComposedTypewriterProps> {
   }
 
   render() {
-    const { classes } = this.props;
-    const { containerRef } = this.mPack;
+    const { containerClass, contentClass } = this.props;
+    const { containerRef, contentRef } = this.mPack;
 
-    return <span ref={containerRef} className={classes.container}></span>;
+    return (
+      <span ref={containerRef} className={clsx(TypewriterClassNames.Container, containerClass)}>
+        <span ref={contentRef} className={clsx(TypewriterClassNames.Content, contentClass)}></span>
+      </span>
+    );
   }
 }
 
-export default withStyles(styles)(Typewriter);
+export default Typewriter;

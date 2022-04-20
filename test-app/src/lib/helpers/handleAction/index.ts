@@ -1,10 +1,9 @@
 import $ from "jquery";
-import { ActionBlock, PackInfo } from "../../types";
+import { ActionBlock, PackInfo, TypewriterClassNames } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
 import { handleDelete } from "./delete";
 
 export const handleAction = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void) => {
-  const { classes } = props;
   const { current: containerCurrent } = pack.containerRef;
 
   const rotateDataIndex = pack.currentDataRotateIndex % pack.copyDataToRotate.length;
@@ -23,13 +22,13 @@ export const handleAction = (props: ComposedTypewriterProps, pack: PackInfo, mov
 
       // Blink sometimes before executing deletion
       if (containerCurrent) {
-        $(containerCurrent).addClass(classes.blink);
+        $(containerCurrent).addClass(TypewriterClassNames.Blink);
       }
 
       pack.timeoutTick = window.setTimeout(() => {
         // Stop blinking
         if (containerCurrent) {
-          $(containerCurrent).removeClass(classes.blink);
+          $(containerCurrent).removeClass(TypewriterClassNames.Blink);
         }
 
         handleDelete(props, pack, moveOn, currentBlock.amount);
