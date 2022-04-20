@@ -11,6 +11,7 @@
 
 ## Breaking Changes
 
+In **^1.1.0**, there are errors. Thus, this version should not be used.
 In **^1.1.1**, I have changed from using react-jss to bare css for styling Typewriter. Thus, overwriting styles is changed.
 
 ## Installation
