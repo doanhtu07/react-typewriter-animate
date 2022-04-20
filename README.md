@@ -9,6 +9,10 @@
 
 **Note: Examples are written far below.**
 
+## Breaking Changes
+
+In **^1.1.1**, I have changed from using react-jss to bare css for styling Typewriter. Thus, overwriting styles is changed.
+
 ## Installation
 
 `npm install react-typewriter-animate`
