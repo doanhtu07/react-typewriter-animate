@@ -1,12 +1,14 @@
+import { DefaultSetting } from "../../defaults";
 import { PackInfo, WordBlock } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
+import { setCursorColor } from "../../utils/Cursor";
+import { moveToPreviousNonEmptyWordBlock } from "../../utils/WordBlock";
 import { deleteChar } from "../handleWord/deleteChar";
-import { moveToPreviousNonEmptyWordBlock, setCursorColor } from "../handleWord/helpers";
 
 // --------- Handle Delete --------
 
 export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void, amount: number) => {
-  const { defaultCursorColor, deleteVariance, maxDeleteSpeed } = props;
+  const { deleteVariance, maxDeleteSpeed } = props;
 
   const { current: containerCurrent } = pack.containerRef;
   const { current: contentCurrent } = pack.contentRef;
@@ -61,10 +63,10 @@ export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, mov
   const newBlock = textBlocks[pack.blockPointer] as WordBlock;
 
   // *** Set cursor color ***
-  setCursorColor(containerCurrent, defaultCursorColor, pack);
+  setCursorColor(props, pack);
 
   // *** Delete ***
-  deleteChar(pack);
+  deleteChar(props, pack);
 
   /**
    *  After deleting 1 character in HTML, we want to delete that 1 character in WordBlock to keep record for later ActionBlock's.
@@ -76,8 +78,8 @@ export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, mov
 
   let waitTime = 0;
 
-  const final_deleteVariance = newBlock.override?.deleteVariance ?? deleteVariance ?? 50;
-  const final_maxDeleteSpeed = newBlock.override?.maxDeleteSpeed ?? maxDeleteSpeed ?? 100;
+  const final_deleteVariance = newBlock.override?.deleteVariance ?? deleteVariance ?? DefaultSetting.deleteVariance;
+  const final_maxDeleteSpeed = newBlock.override?.maxDeleteSpeed ?? maxDeleteSpeed ?? DefaultSetting.maxDeleteSpeed;
   waitTime = final_maxDeleteSpeed - Math.random() * final_deleteVariance;
 
   /**

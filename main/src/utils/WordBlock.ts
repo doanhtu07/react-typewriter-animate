@@ -1,27 +1,4 @@
-import { PackInfo } from "../../types";
-
-export const setCursorColor = (containerCurrent: HTMLSpanElement, defaultCursorColor: string, pack: PackInfo) => {
-  const rotateDataIndex = pack.currentDataRotateIndex % pack.copyDataToRotate.length;
-  const textBlocks = pack.copyDataToRotate[rotateDataIndex];
-  const currentBlock = textBlocks[pack.blockPointer];
-
-  /**
-   *  We can only set cursor color when this is a WordBlock, non-empty, and has cursorColor
-   */
-  if (currentBlock.type === "word" && currentBlock.text !== "" && currentBlock.cursorColor) {
-    const { cursorColor } = currentBlock;
-    if (cursorColor === "") {
-      containerCurrent.style.setProperty("--cursor-color", defaultCursorColor);
-    } else {
-      containerCurrent.style.setProperty("--cursor-color", cursorColor);
-    }
-  } else {
-    /**
-     *  Else: We just use default cursor color
-     */
-    containerCurrent.style.setProperty("--cursor-color", defaultCursorColor);
-  }
-};
+import { PackInfo } from "../types";
 
 export const moveToPreviousNonEmptyWordBlock = (pack: PackInfo) => {
   const rotateDataIndex = pack.currentDataRotateIndex % pack.copyDataToRotate.length;

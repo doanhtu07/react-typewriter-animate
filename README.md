@@ -9,10 +9,21 @@
 
 **Note: Examples are written far below.**
 
-## Breaking Changes
+**Note 2: If you are using earlier versions, please consider updating to the latest version as it is the least buggy version. Sorry for any inconvenience.**
 
-In **^1.1.0** to **^1.1.1**, Typewriter has errors and might not work in all cases.
-In **^1.1.2**, I have changed from using react-jss to bare css for styling Typewriter. Thus, overwriting styles is changed.
+### Table of content
+
+- [Installation](#installation)
+- [Usage in React](#usage-in-react)
+- [Options for Typewriter](#options-for-typewriter)
+- [Options for WordBlock](#options-for-wordblock)
+- [Options for ActionBlock](#options-for-actionblock)
+- [Examples](#examples)
+  - [Basic Example](#basic-example)
+  - [Example with styled WordBlock](#example-with-styled-wordblock)
+  - [Example with delete](#example-with-delete)
+  - [Example with override object in WordBlock](#example-with-override-object-in-wordblock)
+  - [Example with overwrite style object: classes](#example-with-overwrite-style-object-classes)
 
 ## Installation
 
@@ -36,7 +47,6 @@ class Demo extends React.Components {
     return (
       <div>
         <Typewriter
-          defaultCursorColor="black"
           dataToRotate={[
             [
               { type: "word", text: "Hello!" }
@@ -58,7 +68,9 @@ class Demo extends React.Components {
 | Name                         | Type                                         | Required / Default             | Purpose                                                                                                                                     |
 | ---------------------------- | -------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | dataToRotate                 | Array of arrays of (WordBlock / ActionBlock) | Required                       | This is the array of all data (i.e banners) to type out. Each banner is a small array of WordBlock's and ActionBlock's                      |
-| defaultCursorColor           | string                                       | Required                       | Set default color for cursor of Typewriter. A CSS string for color. E.g: red, #ffffff, rgb(0,0,0), var(--color-variable)                    |
+| defaultCursorColor           | string                                       | "black"                        | Set default color for cursor of Typewriter. A CSS string for color. E.g: red, #ffffff, rgb(0,0,0), var(--color-variable)                    |
+| cursorBlinkRate              | string                                       | "900ms"                        | Set blink speed of cursor                                                                                                                   |
+| timeBeforeBlinkCursor        | number                                       | 500ms                          | When finish typing, set time out before blinking cursor                                                                                     |
 | timeBeforeDelete             | number                                       | 1000ms                         | Wait time before deleting a banner after finish typing the whole banner                                                                     |
 | timeBeforeWriteNewRotateData | number                                       | 500ms                          | Wait time before typing next banner                                                                                                         |
 | maxTypeSpeed                 | number                                       | 200ms                          | Maximum typing speed                                                                                                                        |
@@ -115,7 +127,6 @@ class BasicExample extends React.Components {
     return (
       <div className="root">
         <Typewriter
-          defaultCursorColor="black"
           dataToRotate={[
             // Banner 1
             [{ type: "word", text: "Hello!" }],
@@ -141,7 +152,6 @@ class Example_Styled_WordBlock extends React.Components {
     return (
       <div className="root">
         <Typewriter
-          defaultCursorColor="black"
           dataToRotate={[
             // Banner 1
             [
@@ -172,7 +182,6 @@ class Example_Delete extends React.Components {
     return (
       <div className="root">
         <Typewriter
-          defaultCursorColor="black"
           dataToRotate={[
             // Banner 1
             [
@@ -206,7 +215,6 @@ class Example_Override_WordBlock extends React.Components {
     return (
       <div className="root">
         <Typewriter
-          defaultCursorColor="black"
           dataToRotate={[
             // Banner 1
             [
@@ -268,7 +276,6 @@ class Example_Overwrite_Style extends React.Components {
       <div className="root">
         <Typewriter
           containerClass="typewriter-container-overwrite"
-          defaultCursorColor="black"
           dataToRotate={[
             // Banner 1
             [

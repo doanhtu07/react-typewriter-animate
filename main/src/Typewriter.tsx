@@ -4,7 +4,8 @@ import { handleAction } from "./helpers/handleAction";
 import { resetPack } from "./helpers/handleLifeCycle";
 import { handleWord } from "./helpers/handleWord";
 import { PackInfo, TypewriterClassNames, TypewriterProps } from "./types";
-import { deepCopyData } from "./utils";
+import { deepCopyData } from "./utils/CopyData";
+import { blinkCursor } from "./utils/Cursor";
 
 export type ComposedTypewriterProps = TypewriterProps;
 
@@ -31,10 +32,13 @@ class Typewriter extends React.Component<ComposedTypewriterProps> {
       original_blockPointer: -1
     },
 
+    timeoutBlinkCursor: -1,
+
     timeoutTick: -1 // Remain the same even after reseting
   };
 
   componentDidMount() {
+    blinkCursor(this.props, this.mPack);
     this.tick();
   }
 

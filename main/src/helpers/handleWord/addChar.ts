@@ -1,7 +1,11 @@
 import { PackInfo, WordBlock } from "../../types";
-import { insertAt } from "../../utils";
+import { ComposedTypewriterProps } from "../../Typewriter";
+import { unblinkCursor } from "../../utils/Cursor";
+import { insertAt } from "../../utils/String";
 
-export const addChar = (pack: PackInfo) => {
+export const addChar = (props: ComposedTypewriterProps, pack: PackInfo) => {
+  unblinkCursor(props, pack);
+
   const rotateDataIndex = pack.currentDataRotateIndex % pack.copyDataToRotate.length;
   const textBlocks = pack.copyDataToRotate[rotateDataIndex];
   const currentBlock = textBlocks[pack.blockPointer] as WordBlock;

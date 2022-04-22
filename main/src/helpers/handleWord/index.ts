@@ -1,15 +1,14 @@
-import $ from "jquery";
-import { PackInfo, TypewriterClassNames, WordBlock } from "../../types";
+import { DefaultSetting } from "../../defaults";
+import { PackInfo, WordBlock } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
-import { deepCopyData } from "../../utils";
+import { deepCopyData } from "../../utils/CopyData";
+import { setCursorColor } from "../../utils/Cursor";
+import { moveToPreviousNonEmptyWordBlock } from "../../utils/WordBlock";
 import { addChar } from "./addChar";
 import { deleteChar } from "./deleteChar";
-import { moveToPreviousNonEmptyWordBlock, setCursorColor } from "./helpers";
 
 export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void) => {
   const {
-    defaultCursorColor,
-
     typeVariance,
     maxTypeSpeed,
 
@@ -49,9 +48,6 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
    *  => Move to next data in rotation cycle (Remember to reset necessary variables before handling next data)
    */
   if (pack.isDeleting && pack.blockPointer === -1) {
-    // Blink
-    $(containerCurrent).addClass(TypewriterClassNames.Blink);
-
     // Reset necessary variables
     pack.internalBlockPointer = 0;
     pack.blockPointer = 0;
@@ -65,11 +61,9 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
     // Check out next data
     pack.currentDataRotateIndex++;
 
-    const waitTime = timeBeforeWriteNewRotateData ?? 500;
+    const waitTime = timeBeforeWriteNewRotateData ?? DefaultSetting.timeBeforeWriteNewRotateData;
 
     pack.timeoutTick = window.setTimeout(() => {
-      // Stop blinking
-      $(containerCurrent).removeClass(TypewriterClassNames.Blink);
       moveOn();
     }, waitTime);
 
@@ -89,13 +83,13 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
   const newBlock = textBlocks[pack.blockPointer] as WordBlock;
 
   // *** Set cursor color ***
-  setCursorColor(containerCurrent, defaultCursorColor, pack);
+  setCursorColor(props, pack);
 
   // *** Adding ***
   if (!pack.isDeleting) {
     // Note: Since this is when we are not deleting, all moving above is not applicable.
 
-    addChar(pack);
+    addChar(props, pack);
 
     /**
      *  When we finish adding text from WordBlock / WordBlock is empty:
@@ -110,7 +104,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
 
   // *** Deleting ***
   else {
-    deleteChar(pack);
+    deleteChar(props, pack);
   }
 
   // *** Update HTML ***
@@ -119,14 +113,14 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
   let waitTime = 0;
 
   // *** Calculate wait time during typing ***
-  const final_typeVariance = newBlock.override?.typeVariance ?? typeVariance ?? 100;
-  const final_maxTypeSpeed = newBlock.override?.maxTypespeed ?? maxTypeSpeed ?? 200;
+  const final_typeVariance = newBlock.override?.typeVariance ?? typeVariance ?? DefaultSetting.typeVariance;
+  const final_maxTypeSpeed = newBlock.override?.maxTypespeed ?? maxTypeSpeed ?? DefaultSetting.maxTypeSpeed;
   waitTime = final_maxTypeSpeed - Math.random() * final_typeVariance;
 
   // *** Calculate wait time during deleting ***
   if (pack.isDeleting && pack.currentHTML !== "") {
-    const final_deleteVariance = newBlock.override?.deleteVariance ?? deleteVariance ?? 50;
-    const final_maxDeleteSpeed = newBlock.override?.maxDeleteSpeed ?? maxDeleteSpeed ?? 100;
+    const final_deleteVariance = newBlock.override?.deleteVariance ?? deleteVariance ?? DefaultSetting.deleteVariance;
+    const final_maxDeleteSpeed = newBlock.override?.maxDeleteSpeed ?? maxDeleteSpeed ?? DefaultSetting.maxDeleteSpeed;
     waitTime = final_maxDeleteSpeed - Math.random() * final_deleteVariance;
   }
 
@@ -147,7 +141,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
 
     pack.currentDataRotateIndex++; // Check out next data
 
-    waitTime = timeBeforeWriteNewRotateData ?? 500;
+    waitTime = timeBeforeWriteNewRotateData ?? DefaultSetting.timeBeforeWriteNewRotateData;
   }
 
   /**
@@ -158,9 +152,6 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
    *      - Change signal to DELETING
    */
   if (!pack.isDeleting && pack.blockPointer === textBlocks.length) {
-    // Blink
-    $(containerCurrent).addClass(TypewriterClassNames.Blink);
-
     // Check loop and if it is last data to rotate
     if (!loop && pack.currentDataRotateIndex === pack.copyDataToRotate.length - 1) {
       return;
@@ -171,12 +162,10 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
 
     pack.isDeleting = true;
 
-    waitTime = timeBeforeDelete ?? 1000;
+    waitTime = timeBeforeDelete ?? DefaultSetting.timeBeforeDelete;
   }
 
   pack.timeoutTick = window.setTimeout(() => {
-    // Stop blinking
-    $(containerCurrent).removeClass(TypewriterClassNames.Blink);
     moveOn();
   }, waitTime);
 };

@@ -42,12 +42,16 @@ export type PackInfo = {
     original_internalBlockPointer: number;
     original_blockPointer: number;
   };
+
+  timeoutBlinkCursor: number;
 };
 
 export type TypewriterProps = {
   dataToRotate: (WordBlock | ActionBlock)[][];
 
-  defaultCursorColor: string;
+  defaultCursorColor?: string; // Default "black"
+  cursorBlinkRate?: string; // Default "900ms"
+  timeBeforeBlinkCursor?: number; // Default 500ms
 
   timeBeforeDelete?: number; // Default 1000ms
   timeBeforeWriteNewRotateData?: number; // Default 500ms

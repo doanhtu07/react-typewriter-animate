@@ -1,11 +1,9 @@
-import $ from "jquery";
-import { ActionBlock, PackInfo, TypewriterClassNames } from "../../types";
+import { DefaultSetting } from "../../defaults";
+import { ActionBlock, PackInfo } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
 import { handleDelete } from "./delete";
 
 export const handleAction = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void) => {
-  const { current: containerCurrent } = pack.containerRef;
-
   const rotateDataIndex = pack.currentDataRotateIndex % pack.copyDataToRotate.length;
   const textBlocks = pack.copyDataToRotate[rotateDataIndex];
   const currentBlock = textBlocks[pack.blockPointer] as ActionBlock;
@@ -20,18 +18,8 @@ export const handleAction = (props: ComposedTypewriterProps, pack: PackInfo, mov
       pack.deleteCache.original_internalBlockPointer = pack.internalBlockPointer;
       pack.deleteCache.original_blockPointer = pack.blockPointer;
 
-      // Blink sometimes before executing deletion
-      if (containerCurrent) {
-        $(containerCurrent).addClass(TypewriterClassNames.Blink);
-      }
-
       pack.timeoutTick = window.setTimeout(() => {
-        // Stop blinking
-        if (containerCurrent) {
-          $(containerCurrent).removeClass(TypewriterClassNames.Blink);
-        }
-
         handleDelete(props, pack, moveOn, currentBlock.amount);
-      }, currentBlock.wait ?? 1000);
+      }, currentBlock.wait ?? DefaultSetting.ActionBlock.delete.wait);
   }
 };

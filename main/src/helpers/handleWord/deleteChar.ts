@@ -1,7 +1,11 @@
 import { PackInfo } from "../../types";
-import { removeChar } from "../../utils";
+import { ComposedTypewriterProps } from "../../Typewriter";
+import { unblinkCursor } from "../../utils/Cursor";
+import { removeChar } from "../../utils/String";
 
-export const deleteChar = (pack: PackInfo) => {
+export const deleteChar = (props: ComposedTypewriterProps, pack: PackInfo) => {
+  unblinkCursor(props, pack);
+
   /**
    *  This can happen when we are adding a span.
    *  HTML pointer is pointing to a new blank position.
@@ -70,12 +74,12 @@ const trimSpan = (pack: PackInfo, id: number) => {
       /**
        *  We will look for '<' that is part of '<span'.
        */
-      while (true) {
-        if (pack.currentHTML.at(pointer) === ">") {
+      while (pointer >= 0) {
+        if (pack.currentHTML.charAt(pointer) === ">") {
           break;
         }
 
-        if (pack.currentHTML.at(pointer) === "<" && pack.currentHTML.substring(pointer, pointer + 5) !== "<span") {
+        if (pack.currentHTML.charAt(pointer) === "<" && pack.currentHTML.substring(pointer, pointer + 5) !== "<span") {
           break;
         }
 

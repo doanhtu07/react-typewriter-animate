@@ -21,9 +21,6 @@ const styles = {
   },
   blue: {
     color: "blue"
-  },
-  typewriter: {
-    color: "grey"
   }
 };
 
@@ -37,9 +34,7 @@ class App extends React.Component<Props> {
       <div className={classes.root}>
         <h1 className={classes.title}>
           <Typewriter
-            containerClass={classes.typewriter}
             loop
-            defaultCursorColor="black"
             dataToRotate={[
               [
                 { type: "word", text: "A simple" },
