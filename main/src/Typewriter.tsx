@@ -13,7 +13,7 @@ export type ComposedTypewriterProps = TypewriterProps;
 // https://css-tricks.com/snippets/css/typewriter-effect/
 
 class Typewriter extends React.Component<ComposedTypewriterProps> {
-  mDefaultPackData: Omit<PackInfo, "containerRef" | "contentRef"> = {
+  mDefaultPackData: Omit<PackInfo, "containerRef" | "contentRef" | "cursorRef"> = {
     // Since we want to support deleting, we must have a copy data and perform delete on it. We will restore original data after rotate through all data.
     copyDataToRotate: deepCopyData(this.props.dataToRotate),
 
@@ -30,6 +30,8 @@ class Typewriter extends React.Component<ComposedTypewriterProps> {
       original_blockPointer: -1
     },
 
+    cursorCache: { prevCursorClass: "" },
+
     timeoutBlinkCursor: -1,
 
     timeoutTick: -1 // Remain the same even after reseting
@@ -38,6 +40,7 @@ class Typewriter extends React.Component<ComposedTypewriterProps> {
   mPack: PackInfo = {
     containerRef: React.createRef<HTMLSpanElement>(),
     contentRef: React.createRef<HTMLSpanElement>(),
+    cursorRef: React.createRef<HTMLSpanElement>(),
     ...this.mDefaultPackData
   };
 
@@ -117,12 +120,16 @@ class Typewriter extends React.Component<ComposedTypewriterProps> {
   }
 
   render() {
-    const { containerClass, contentClass } = this.props;
-    const { containerRef, contentRef } = this.mPack;
+    const { containerClass, contentClass, cursorClass, cursor } = this.props;
+    const { containerRef, contentRef, cursorRef } = this.mPack;
 
     return (
       <span ref={containerRef} className={clsx(TypewriterClassNames.Container, containerClass)}>
         <span ref={contentRef} className={clsx(TypewriterClassNames.Content, contentClass)}></span>
+
+        <span ref={cursorRef} className={clsx(TypewriterClassNames.Cursor, cursorClass)}>
+          {cursor?.char ?? DefaultSetting.cursor.char}
+        </span>
       </span>
     );
   }

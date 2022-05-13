@@ -3,71 +3,93 @@ import { DefaultSetting } from "../defaults";
 import { PackInfo, TypewriterClassNames } from "../types";
 import { ComposedTypewriterProps } from "../Typewriter";
 
-export const setCursorColor = (props: ComposedTypewriterProps, pack: PackInfo) => {
-  const { defaultCursorColor } = props;
-  const { current: containerCurrent } = pack.containerRef;
+export const setCursorClass = (props: ComposedTypewriterProps, pack: PackInfo) => {
+  const { cursor } = props;
+
+  const { current: cursorCurrent } = pack.cursorRef;
 
   const rotateDataIndex = pack.currentDataRotateIndex % pack.copyDataToRotate.length;
   const textBlocks = pack.copyDataToRotate[rotateDataIndex];
   const currentBlock = textBlocks[pack.blockPointer];
 
+  if (!cursorCurrent) {
+    return;
+  }
+
   /**
-   *  We can only set cursor color when this is a WordBlock, non-empty, and has cursorColor
+   *  We only care when current block is WordBlock and non-empty
    */
-  if (currentBlock.type === "word" && currentBlock.text !== "" && currentBlock.cursorColor) {
-    const { cursorColor } = currentBlock;
-    if (cursorColor === "") {
-      containerCurrent?.style.setProperty("--cursor-color", defaultCursorColor ?? DefaultSetting.defaultCursorColor);
-    } else {
-      containerCurrent?.style.setProperty("--cursor-color", cursorColor);
-    }
-  } else {
+  if (currentBlock.type === "word" && currentBlock.text !== "") {
     /**
-     *  Else: We just use default cursor color
+     *  Update cursor character if applicable
      */
-    containerCurrent?.style.setProperty("--cursor-color", defaultCursorColor ?? DefaultSetting.defaultCursorColor);
+    if (currentBlock.cursor?.char) {
+      cursorCurrent.textContent = currentBlock.cursor.char;
+    } else {
+      cursorCurrent.textContent = cursor?.char ?? DefaultSetting.cursor.char;
+    }
+
+    /**
+     *  We remove cursor style completely when encountering a block that does not have cursorClass.
+     */
+    if (!currentBlock.cursor?.cursorClass) {
+      $(cursorCurrent).removeClass(pack.cursorCache.prevCursorClass);
+      pack.cursorCache.prevCursorClass = "";
+    }
+
+    /**
+     *  We set cursor style when current block has cursorClass but has not applied to cursor current
+     */
+    if (currentBlock.cursor?.cursorClass && !$(cursorCurrent).hasClass(currentBlock.cursor.cursorClass)) {
+      $(cursorCurrent).removeClass(pack.cursorCache.prevCursorClass);
+      pack.cursorCache.prevCursorClass = currentBlock.cursor.cursorClass;
+      $(cursorCurrent).addClass(currentBlock.cursor.cursorClass);
+    }
   }
 };
 
 export const blinkCursor = (props: ComposedTypewriterProps, pack: PackInfo) => {
-  const { cursorBlinkRate, timeBeforeBlinkCursor } = props;
+  const cursorBlinkRate = props.cursor?.cursorBlinkRate;
+  const timeBeforeBlinkCursor = props.cursor?.timeBeforeBlinkCursor;
 
   pack.timeoutBlinkCursor = window.setTimeout(() => {
-    const { current: containerCurrent } = pack.containerRef;
+    const { current: cursorCurrent } = pack.cursorRef;
 
-    if (containerCurrent) {
-      blinkCursorHelper(containerCurrent, cursorBlinkRate ?? DefaultSetting.cursorBlinkRate, true);
+    if (cursorCurrent) {
+      blinkCursorHelper(cursorCurrent, cursorBlinkRate ?? DefaultSetting.cursor.cursorBlinkRate, true);
     }
-  }, timeBeforeBlinkCursor ?? DefaultSetting.timeBeforeBlinkCursor);
+  }, timeBeforeBlinkCursor ?? DefaultSetting.cursor.timeBeforeBlinkCursor);
 };
 
 export const unblinkCursor = (props: ComposedTypewriterProps, pack: PackInfo) => {
-  const { cursorBlinkRate, timeBeforeBlinkCursor } = props;
-  const { current: containerCurrent } = pack.containerRef;
+  const cursorBlinkRate = props.cursor?.cursorBlinkRate;
+  const timeBeforeBlinkCursor = props.cursor?.timeBeforeBlinkCursor;
 
-  if (!containerCurrent) {
+  const { current: cursorCurrent } = pack.cursorRef;
+
+  if (!cursorCurrent) {
     return;
   }
 
   // Clear blinking cursor
   if (pack.timeoutBlinkCursor !== -1) {
-    blinkCursorHelper(containerCurrent, cursorBlinkRate ?? DefaultSetting.cursorBlinkRate, false);
+    blinkCursorHelper(cursorCurrent, cursorBlinkRate ?? DefaultSetting.cursor.cursorBlinkRate, false);
     window.clearTimeout(pack.timeoutBlinkCursor);
 
     // Blink when timeout. This can terminate due to handleAction or handleWord.
     pack.timeoutBlinkCursor = window.setTimeout(() => {
-      if (containerCurrent) {
-        blinkCursorHelper(containerCurrent, cursorBlinkRate ?? DefaultSetting.cursorBlinkRate, true);
+      if (cursorCurrent) {
+        blinkCursorHelper(cursorCurrent, cursorBlinkRate ?? DefaultSetting.cursor.cursorBlinkRate, true);
       }
-    }, timeBeforeBlinkCursor ?? DefaultSetting.timeBeforeBlinkCursor);
+    }, timeBeforeBlinkCursor ?? DefaultSetting.cursor.timeBeforeBlinkCursor);
   }
 };
 
-const blinkCursorHelper = (containerCurrent: HTMLSpanElement, blinkRate: string, blink: boolean) => {
+const blinkCursorHelper = (cursorCurrent: HTMLSpanElement, blinkRate: string, blink: boolean) => {
   if (blink) {
-    containerCurrent.style.setProperty("--cursor-blink-rate", blinkRate);
-    $(containerCurrent).addClass(TypewriterClassNames.Blink);
+    cursorCurrent.style.setProperty("--cursor-blink-rate", blinkRate);
+    $(cursorCurrent).addClass(TypewriterClassNames.Blink);
   } else {
-    $(containerCurrent).removeClass(TypewriterClassNames.Blink);
+    $(cursorCurrent).removeClass(TypewriterClassNames.Blink);
   }
 };

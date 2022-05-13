@@ -9,8 +9,6 @@
 
 **Note: Examples are written far below.**
 
-**Note 2: If you are using earlier versions, please consider updating to the latest version as it is the least buggy version. Sorry for any inconvenience.**
-
 ### Table of content
 
 - [Installation](#installation)
@@ -21,6 +19,7 @@
 - [Examples](#examples)
   - [Basic Example](#basic-example)
   - [Example with override object in WordBlock](#example-with-override-object-in-wordblock)
+  - [Example with override cursor in WordBlock](#example-with-override-cursor-in-wordblock)
   - [Example with styled WordBlock](#example-with-styled-wordblock)
   - [Example with overwrite style object: classes](#example-with-overwrite-style-object-classes)
   - [Example with delete](#example-with-delete)
@@ -66,45 +65,70 @@ class Demo extends React.Components {
 
 ## Options for Typewriter
 
-| Name                         | Type                                         | Required / Default             | Purpose                                                                                                                                     |
-| ---------------------------- | -------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| dataToRotate                 | Array of arrays of (WordBlock / ActionBlock) | Required                       | This is the array of all data (i.e banners) to type out. Each banner is a small array of WordBlock's and ActionBlock's                      |
-| defaultCursorColor           | string                                       | "black"                        | Set default color for cursor of Typewriter. A CSS string for color. E.g: red, #ffffff, rgb(0,0,0), var(--color-variable)                    |
-| cursorBlinkRate              | string                                       | "900ms"                        | Set blink speed of cursor                                                                                                                   |
-| timeBeforeBlinkCursor        | number                                       | 500ms                          | When finish typing, set time out before blinking cursor                                                                                     |
-| timeBeforeDelete             | number                                       | 1000ms                         | Wait time before deleting a banner after finish typing the whole banner                                                                     |
-| timeBeforeWriteNewRotateData | number                                       | 500ms                          | Wait time before typing next banner                                                                                                         |
-| maxTypeSpeed                 | number                                       | 200ms                          | Maximum typing speed                                                                                                                        |
-| typeVariance                 | number                                       | 100ms                          | Type speed range = maxTypespeed - typeVariance -> maxTypespeed. Type speed of each character can vary randomly within this range.           |
-| maxDeleteSpeed               | number                                       | 100ms                          | Maximum deleting speed                                                                                                                      |
-| deleteVariance               | number                                       | 50ms                           | Delete speed range = maxDeleteSpeed - deleteVariance -> maxDeleteSpeed. Delete speed of each character can vary randomly within this range. |
-| loop                         | boolean                                      | false                          | Determine whether Typewriter should loop these banners or stop after the last banner.                                                       |
-| start                        | boolean                                      | true                           | Determine whether Typewriter should start typing.                                                                                           |
-| containerClass               | string                                       | Default styles from Typewriter | Overwrite default styles of Typewriter-container                                                                                            |
-| contentClass                 | string                                       | Default styles from Typewriter | Overwrite default styles of Typewriter-content                                                                                              |
+```typescript
+type TypewriterProps = {
+  dataToRotate: (WordBlock | ActionBlock)[][]; // Purpose: This is the array of all data (i.e banners) to type out. Each banner is a small array of WordBlock's and ActionBlock's
+
+  cursor?: {
+    char?: string; // Default: "│" | Purpose: Set cursor's appearance using string.
+    cursorBlinkRate?: string; // Default: "900ms" | Purpose: Set blink speed of cursor.
+    timeBeforeBlinkCursor?: number; // Default: 500ms | Purpose: When finish typing, set timeout before blinking cursor.
+  };
+
+  timeBeforeDelete?: number; // Default: 1000ms | Purpose: Wait time before deleting a banner after finish typing the whole banner.
+  timeBeforeWriteNewRotateData?: number; // Default: 500ms | Purpose: Wait time before typing next banner.
+
+  maxTypeSpeed?: number; // Default: 200ms | Purpose: Maximum typing speed.
+  typeVariance?: number; // Default: 100ms | Purpose: Type speed range = maxTypespeed - typeVariance -> maxTypespeed. Type speed of each character can vary randomly within this range.
+
+  maxDeleteSpeed?: number; // Default: 100ms | Purpose: Maximum deleting speed.
+  deleteVariance?: number; // Default: 50ms | Purpose: Delete speed range = maxDeleteSpeed - deleteVariance -> maxDeleteSpeed. Delete speed of each character can vary randomly within this range.
+
+  start?: boolean; // Default: true | Purpose: Determine whether Typewriter should start typing.
+  loop?: boolean; // Default: false | Purpose: Determine whether Typewriter should loop these banners or stop after the last banner.
+
+  containerClass?: string; // Purpose: Overwrite default styles of Typewriter-container.
+  contentClass?: string; // Purpose: Overwrite default styles of Typewriter-content.
+  cursorClass?: string; // Purpose: Overwrite default styles of Typewriter-cursor.
+};
+```
 
 **Note: You can access the class name keywords safely through TypewriterClassNames exported from the package.**
 
+```typescript
+enum TypewriterClassNames {
+  Container = "Typewriter-container",
+  Content = "Typewriter-content",
+  Cursor = "Typewriter-cursor",
+  Blink = "Typewriter-blink",
+  Blink_Keyframe = "Typewriter-blink-keyframe"
+}
+```
+
 ## Options for WordBlock
 
-| Name        | Type               | Required / Optional | Purpose                                                                                        |
-| ----------- | ------------------ | ------------------- | ---------------------------------------------------------------------------------------------- |
-| type        | "word"             | Required            | Declare this is a WordBlock                                                                    |
-| text        | string             | Required            | Text to type out                                                                               |
-| spanClass   | string             | Optional            | Class name for this WordBlock. Typewriter will wrap text inside a <span> for you.              |
-| cursorColor | string             | Optional            | A CSS string for color. E.g: red, #ffffff, rgb(0,0,0), var(--color-variable)                   |
-| override    | Object shown below | Optional            | To override some props passed in initially for Typewriter and apply only for current WordBlock |
-
-**Object for Override**
-
 ```typescript
-override?: {
-  maxTypespeed?: number;
-  typeVariance?: number;
+type WordBlock = {
+  type: "word";
+  text: string;
 
-  maxDeleteSpeed?: number;
-  deleteVariance?: number;
-}
+  spanClass?: string; // Purpose: Class name for current word block. Typewriter will wrap text inside a <span> for you.
+
+  // Purpose: Override cursor style and appearance.
+  cursor?: {
+    char?: string; // Default "│"
+    cursorClass?: string;
+  };
+
+  // Purpose: Override type speed and delete speed passed from main props.
+  override?: {
+    maxTypespeed?: number;
+    typeVariance?: number;
+
+    maxDeleteSpeed?: number;
+    deleteVariance?: number;
+  };
+};
 ```
 
 ## Options for ActionBlock
@@ -178,6 +202,37 @@ class Example_Override_WordBlock extends React.Components {
 }
 ```
 
+### Example with override cursor in WordBlock
+
+```typescript
+import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
+
+class Example_Override_Cursor_WordBlock extends React.Components {
+  render() {
+    return (
+      <div className="root">
+        <Typewriter
+          dataToRotate={[
+            // Banner 1
+            [
+              { type: "word", text: "Changing cursor..." },
+              {
+                type: "word",
+                text: "now!",
+                cursor: { char: "😀", cursorClass: "css-class" }
+              }
+            ],
+            // Banner 2
+            [{ type: "word", text: "I'm Anh Tu." }]
+          ]}
+        />
+      </div>
+    );
+  }
+}
+```
+
 ### Example with styled WordBlock
 
 ```typescript
@@ -219,22 +274,24 @@ import "./overwrite.css";
 /**
  *  Default styles:
  *
- *  .Typewriter-container {
+ *  .Typewriter-cursor {
  *     --cursor-color: black;
- *     border-right: 0.15em solid var(--cursor-color);
- *     transition: border-right 0.2s;
+ *     --cursor-blink-rate: 900ms;
+ *
+ *     color: var(--cursor-color);
+ *     transition: color 0.2s;
  *  }
  *
  *  .Typewriter-blink {
- *    animation: Typewriter-blink-caret 0.9s step-end infinite;
+ *    animation: Typewriter-blink-keyframe 0.9s step-end infinite;
  *  },
  *
- *  @keyframes Typewriter-blink-caret {
- *    0%: {
- *      border-color: transparent;
+ *  @keyframes Typewriter-blink-keyframe {
+ *    0% {
+ *      color: transparent;
  *    }
- *    50%: {
- *      border-color: var(--cursor-color);
+ *    50% {
+ *      color: var(--cursor-color);
  *    }
  *  }
  */

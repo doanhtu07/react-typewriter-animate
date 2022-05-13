@@ -25,8 +25,22 @@ const styles = {
     justifyContent: "center"
   },
 
-  blue: {
-    color: "blue"
+  go: {
+    color: "blue",
+    fontStyle: "italic"
+  },
+  goCursor: {
+    color: "blue",
+    transform: "rotate(10deg)",
+    display: "inline-block",
+    padding: "0px 5px"
+  },
+
+  letsGetIt: {
+    fontWeight: 900
+  },
+  letsGetItCursor: {
+    fontWeight: 900
   }
 };
 
@@ -49,10 +63,21 @@ class App extends React.Component<Props, State> {
       <div className={classes.root}>
         <h1 className={classes.title}>
           <Typewriter
-            loop
             dataToRotate={[
               [
-                { type: "word", text: "Here we go!" },
+                { type: "word", text: "Here we " },
+                {
+                  type: "word",
+                  text: "go!",
+                  spanClass: classes.go,
+                  cursor: { cursorClass: classes.goCursor }
+                },
+                {
+                  type: "word",
+                  text: " Let's get it.",
+                  spanClass: classes.letsGetIt,
+                  cursor: { cursorClass: classes.letsGetItCursor }
+                },
                 {
                   type: "action",
                   action: "function",
@@ -66,6 +91,8 @@ class App extends React.Component<Props, State> {
                 }
               ]
             ]}
+            loop
+            timeBeforeDelete={5000}
           />
         </h1>
 

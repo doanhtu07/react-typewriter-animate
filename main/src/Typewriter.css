@@ -1,20 +1,19 @@
-.Typewriter-container {
-  --cursor-color: black;
+.Typewriter-cursor {
   --cursor-blink-rate: 900ms;
 
-  border-right: 0.15em solid var(--cursor-color);
-  transition: border-right 0.2s;
+  color: inherit;
+  transition: all 0.2s;
 }
 
 .Typewriter-blink {
-  animation: Typewriter-blink-caret var(--cursor-blink-rate) step-end infinite;
+  animation: Typewriter-blink-keyframe var(--cursor-blink-rate) step-end infinite;
 }
 
-@keyframes Typewriter-blink-caret {
+@keyframes Typewriter-blink-keyframe {
   0% {
-    border-color: transparent;
+    opacity: 0;
   }
   50% {
-    border-color: var(--cursor-color);
+    opacity: 1;
   }
 }

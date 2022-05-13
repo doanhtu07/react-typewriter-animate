@@ -1,7 +1,9 @@
 export const DefaultSetting = {
-  defaultCursorColor: "black",
-  cursorBlinkRate: "900ms",
-  timeBeforeBlinkCursor: 500,
+  cursor: {
+    char: "│",
+    cursorBlinkRate: "900ms",
+    timeBeforeBlinkCursor: 500
+  },
 
   timeBeforeDelete: 1000,
   timeBeforeWriteNewRotateData: 500,

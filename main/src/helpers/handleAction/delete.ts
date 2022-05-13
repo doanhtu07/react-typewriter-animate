@@ -1,19 +1,18 @@
 import { DefaultSetting } from "../../defaults";
 import { PackInfo, WordBlock } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
-import { setCursorColor } from "../../utils/Cursor";
+import { setCursorClass } from "../../utils/Cursor";
 import { moveToPreviousNonEmptyWordBlock } from "../../utils/WordBlock";
 import { deleteChar } from "../handleWord/deleteChar";
 
 // --------- Handle Delete --------
 
 export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void, amount: number) => {
-  const { deleteVariance, maxDeleteSpeed } = props;
+  const { deleteVariance, maxDeleteSpeed, timeBeforeDelete } = props;
 
-  const { current: containerCurrent } = pack.containerRef;
   const { current: contentCurrent } = pack.contentRef;
 
-  if (!containerCurrent || !contentCurrent) {
+  if (!contentCurrent) {
     return;
   }
 
@@ -29,7 +28,19 @@ export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, mov
    */
   if (amount <= 0) {
     prepareToMoveOn(pack);
-    moveOn();
+
+    if (pack.blockPointer === textBlocks.length - 1) {
+      // If current action is the last block, set wait time to timeBeforeDelete
+      const waitTime = timeBeforeDelete ?? DefaultSetting.timeBeforeDelete;
+
+      pack.timeoutTick = window.setTimeout(() => {
+        moveOn();
+      }, waitTime);
+    } else {
+      // Else, just move on as usual
+      moveOn();
+    }
+
     return;
   }
 
@@ -63,7 +74,7 @@ export const handleDelete = (props: ComposedTypewriterProps, pack: PackInfo, mov
   const newBlock = textBlocks[pack.blockPointer] as WordBlock;
 
   // *** Set cursor color ***
-  setCursorColor(props, pack);
+  setCursorClass(props, pack);
 
   // *** Delete ***
   deleteChar(props, pack);

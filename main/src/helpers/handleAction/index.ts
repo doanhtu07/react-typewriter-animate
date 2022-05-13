@@ -27,7 +27,7 @@ export const handleAction = (props: ComposedTypewriterProps, pack: PackInfo, mov
 
     case "function":
       pack.timeoutTick = window.setTimeout(() => {
-        handleFunction(pack, moveOn, currentBlock.func);
+        handleFunction(props, pack, moveOn, currentBlock.func);
       }, currentBlock.wait ?? DefaultSetting.ActionBlock.function.wait);
 
       break;

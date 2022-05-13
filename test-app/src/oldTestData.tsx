@@ -12,9 +12,11 @@ export const typeSpeed: TypewriterProps = {
       },
       {
         type: "word",
-        text: "easy-to-use ",
-        //   spanClass: classes.blue,
-        cursorColor: "blue"
+        text: "easy-to-use "
+        // spanClass: classes.blue,
+        // cursor: {
+        //   cursorClass: classes.blue
+        // }
       },
       {
         type: "word",

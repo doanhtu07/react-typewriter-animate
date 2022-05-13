@@ -2,7 +2,7 @@ import { DefaultSetting } from "../../defaults";
 import { PackInfo, WordBlock } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
 import { deepCopyData } from "../../utils/CopyData";
-import { setCursorColor } from "../../utils/Cursor";
+import { setCursorClass } from "../../utils/Cursor";
 import { moveToPreviousNonEmptyWordBlock } from "../../utils/WordBlock";
 import { addChar } from "./addChar";
 import { deleteChar } from "./deleteChar";
@@ -23,10 +23,9 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
 
   const isLoop = loop === undefined ? DefaultSetting.loop : loop;
 
-  const { current: containerCurrent } = pack.containerRef;
   const { current: contentCurrent } = pack.contentRef;
 
-  if (!containerCurrent || !contentCurrent) {
+  if (!contentCurrent) {
     return;
   }
 
@@ -85,7 +84,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
   const newBlock = textBlocks[pack.blockPointer] as WordBlock;
 
   // *** Set cursor color ***
-  setCursorColor(props, pack);
+  setCursorClass(props, pack);
 
   // *** Adding ***
   if (!pack.isDeleting) {

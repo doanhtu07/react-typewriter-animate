@@ -4,7 +4,10 @@ export type WordBlock = {
   type: "word";
   text: string;
   spanClass?: string;
-  cursorColor?: string;
+  cursor?: {
+    char?: string; // Default "│"
+    cursorClass?: string;
+  };
   override?: {
     maxTypespeed?: number;
     typeVariance?: number;
@@ -33,6 +36,7 @@ type Action =
 export type PackInfo = {
   containerRef: React.RefObject<HTMLSpanElement>;
   contentRef: React.RefObject<HTMLSpanElement>;
+  cursorRef: React.RefObject<HTMLSpanElement>;
 
   copyDataToRotate: (WordBlock | ActionBlock)[][];
 
@@ -51,15 +55,21 @@ export type PackInfo = {
     original_blockPointer: number;
   };
 
+  cursorCache: {
+    prevCursorClass: string;
+  };
+
   timeoutBlinkCursor: number;
 };
 
 export type TypewriterProps = {
   dataToRotate: (WordBlock | ActionBlock)[][];
 
-  defaultCursorColor?: string; // Default "black"
-  cursorBlinkRate?: string; // Default "900ms"
-  timeBeforeBlinkCursor?: number; // Default 500ms
+  cursor?: {
+    char?: string; // Default "│"
+    cursorBlinkRate?: string; // Default "900ms"
+    timeBeforeBlinkCursor?: number; // Default 500ms
+  };
 
   timeBeforeDelete?: number; // Default 1000ms
   timeBeforeWriteNewRotateData?: number; // Default 500ms
@@ -75,11 +85,13 @@ export type TypewriterProps = {
 
   containerClass?: string;
   contentClass?: string;
+  cursorClass?: string;
 };
 
 export enum TypewriterClassNames {
   Container = "Typewriter-container",
   Content = "Typewriter-content",
+  Cursor = "Typewriter-cursor",
   Blink = "Typewriter-blink",
-  Blink_Caret = "Typewriter-blink-caret"
+  Blink_Keyframe = "Typewriter-blink-keyframe"
 }
