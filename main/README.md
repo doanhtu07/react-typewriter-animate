@@ -20,10 +20,11 @@
 - [Options for ActionBlock](#options-for-actionblock)
 - [Examples](#examples)
   - [Basic Example](#basic-example)
-  - [Example with styled WordBlock](#example-with-styled-wordblock)
-  - [Example with delete](#example-with-delete)
   - [Example with override object in WordBlock](#example-with-override-object-in-wordblock)
+  - [Example with styled WordBlock](#example-with-styled-wordblock)
   - [Example with overwrite style object: classes](#example-with-overwrite-style-object-classes)
+  - [Example with delete](#example-with-delete)
+  - [Example with combo: start flag and function](#example-with-combo-start-flag-and-function)
 
 ## Installation
 
@@ -78,6 +79,7 @@ class Demo extends React.Components {
 | maxDeleteSpeed               | number                                       | 100ms                          | Maximum deleting speed                                                                                                                      |
 | deleteVariance               | number                                       | 50ms                           | Delete speed range = maxDeleteSpeed - deleteVariance -> maxDeleteSpeed. Delete speed of each character can vary randomly within this range. |
 | loop                         | boolean                                      | false                          | Determine whether Typewriter should loop these banners or stop after the last banner.                                                       |
+| start                        | boolean                                      | true                           | Determine whether Typewriter should start typing.                                                                                           |
 | containerClass               | string                                       | Default styles from Typewriter | Overwrite default styles of Typewriter-container                                                                                            |
 | contentClass                 | string                                       | Default styles from Typewriter | Overwrite default styles of Typewriter-content                                                                                              |
 
@@ -107,12 +109,21 @@ override?: {
 
 ## Options for ActionBlock
 
-| Name   | Type     | Required / Default | Purpose                                            |
-| ------ | -------- | ------------------ | -------------------------------------------------- |
-| type   | "action" | Required           | Declare this is an ActionBlock                     |
-| action | "delete" | Required           | Declare action name                                |
-| amount | number   | Required           | Amount of characters to delete                     |
-| wait   | number   | 1000ms             | Wait time before starting to execute delete action |
+```typescript
+type DeleteBlock = {
+  type: "action";
+  action: "delete";
+  amount: number;
+  wait?: number; // Default wait time before delete is 1000ms
+};
+
+type FunctionBlock = {
+  type: "action";
+  action: "function";
+  func: () => void;
+  wait?: number; // Default wait time before doing function is 0ms
+};
+```
 
 ## Examples
 
@@ -130,6 +141,33 @@ class BasicExample extends React.Components {
           dataToRotate={[
             // Banner 1
             [{ type: "word", text: "Hello!" }],
+            // Banner 2
+            [{ type: "word", text: "I'm Anh Tu." }]
+          ]}
+        />
+      </div>
+    );
+  }
+}
+```
+
+### Example with override object in WordBlock
+
+```typescript
+import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
+
+class Example_Override_WordBlock extends React.Components {
+  render() {
+    return (
+      <div className="root">
+        <Typewriter
+          dataToRotate={[
+            // Banner 1
+            [
+              { type: "word", text: "I'm typing fast until here" },
+              { type: "word", text: "...", override: { maxTypespeed: 600 } }
+            ],
             // Banner 2
             [{ type: "word", text: "I'm Anh Tu." }]
           ]}
@@ -169,66 +207,6 @@ class Example_Styled_WordBlock extends React.Components {
   }
 }
 
-```
-
-### Example with delete
-
-```typescript
-import Typewriter from "react-typewriter-animate";
-import "react-typewriter-animate/dist/Typewriter.css";
-
-class Example_Delete extends React.Components {
-  render() {
-    return (
-      <div className="root">
-        <Typewriter
-          dataToRotate={[
-            // Banner 1
-            [
-              {
-                type: "word",
-                text: "What's up?",
-                spanClass: "css-class-name",
-                cursorColor: "blue"
-              },
-              { type: "action", action: "delete", amount: "up?".length },
-              { type: "word", text: "going on, guys?" }
-            ],
-            // Banner 2
-            [{ type: "word", text: "I'm Anh Tu." }]
-          ]}
-        />
-      </div>
-    );
-  }
-}
-```
-
-### Example with override object in WordBlock
-
-```typescript
-import Typewriter from "react-typewriter-animate";
-import "react-typewriter-animate/dist/Typewriter.css";
-
-class Example_Override_WordBlock extends React.Components {
-  render() {
-    return (
-      <div className="root">
-        <Typewriter
-          dataToRotate={[
-            // Banner 1
-            [
-              { type: "word", text: "I'm typing fast until here" },
-              { type: "word", text: "...", override: { maxTypespeed: 600 } }
-            ],
-            // Banner 2
-            [{ type: "word", text: "I'm Anh Tu." }]
-          ]}
-        />
-      </div>
-    );
-  }
-}
 ```
 
 ### Example with overwrite style object: classes
@@ -286,6 +264,96 @@ class Example_Overwrite_Style extends React.Components {
             [{ type: "word", text: "I'm Anh Tu." }]
           ]}
         />
+      </div>
+    );
+  }
+}
+```
+
+### Example with delete
+
+```typescript
+import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
+
+class Example_Delete extends React.Components {
+  render() {
+    return (
+      <div className="root">
+        <Typewriter
+          dataToRotate={[
+            // Banner 1
+            [
+              {
+                type: "word",
+                text: "What's up?",
+                spanClass: "css-class-name",
+                cursorColor: "blue"
+              },
+              { type: "action", action: "delete", amount: "up?".length },
+              { type: "word", text: "going on, guys?" }
+            ],
+            // Banner 2
+            [{ type: "word", text: "I'm Anh Tu." }]
+          ]}
+        />
+      </div>
+    );
+  }
+}
+```
+
+### Example with combo: start flag and function
+
+```typescript
+import Typewriter from "react-typewriter-animate";
+import "react-typewriter-animate/dist/Typewriter.css";
+
+class Example_Start_Function extends React.Components {
+  state = {
+    start: false
+  };
+
+  render() {
+    const { start } = this.state;
+
+    return (
+      <div className="root">
+        <h1 className="title">
+          <Typewriter
+            dataToRotate={[
+              [
+                { type: "word", text: "Here we go!" },
+                {
+                  type: "action",
+                  action: "function",
+                  func: () => {
+                    console.log("Hello");
+                    this.setState({
+                      start: true
+                    });
+                  },
+                  wait: 1000
+                }
+              ]
+            ]}
+          />
+        </h1>
+
+        <h1 className="description">
+          <Typewriter
+            start={start}
+            dataToRotate={[
+              [
+                {
+                  type: "word",
+                  text: "Hello guys!"
+                }
+              ],
+              [{ type: "word", text: "I'm Tu" }]
+            ]}
+          />
+        </h1>
       </div>
     );
   }

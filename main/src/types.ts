@@ -16,11 +16,19 @@ export type WordBlock = {
 
 export type ActionBlock = {
   type: "action";
-} & {
-  action: "delete";
-  amount: number;
-  wait?: number; // Default wait time before delete is 1000ms
-};
+} & Action;
+
+type Action =
+  | {
+      action: "delete";
+      amount: number;
+      wait?: number; // Default wait time before delete is 1000ms
+    }
+  | {
+      action: "function";
+      func: () => void;
+      wait?: number; // Default wait time before doing function is 0ms
+    };
 
 export type PackInfo = {
   containerRef: React.RefObject<HTMLSpanElement>;
@@ -62,7 +70,8 @@ export type TypewriterProps = {
   maxDeleteSpeed?: number; // Default 100ms
   deleteVariance?: number; // Default 50ms
 
-  loop?: boolean;
+  start?: boolean; // Default true
+  loop?: boolean; // Default false
 
   containerClass?: string;
   contentClass?: string;

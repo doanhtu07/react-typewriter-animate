@@ -12,9 +12,15 @@ export const DefaultSetting = {
   maxDeleteSpeed: 100,
   deleteVariance: 50,
 
+  start: true,
+  loop: false,
+
   ActionBlock: {
     delete: {
       wait: 1000
+    },
+    function: {
+      wait: 0
     }
   }
 };

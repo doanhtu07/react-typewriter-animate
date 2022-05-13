@@ -2,6 +2,7 @@ import { DefaultSetting } from "../../defaults";
 import { ActionBlock, PackInfo } from "../../types";
 import { ComposedTypewriterProps } from "../../Typewriter";
 import { handleDelete } from "./delete";
+import { handleFunction } from "./function";
 
 export const handleAction = (props: ComposedTypewriterProps, pack: PackInfo, moveOn: () => void) => {
   const rotateDataIndex = pack.currentDataRotateIndex % pack.copyDataToRotate.length;
@@ -21,5 +22,14 @@ export const handleAction = (props: ComposedTypewriterProps, pack: PackInfo, mov
       pack.timeoutTick = window.setTimeout(() => {
         handleDelete(props, pack, moveOn, currentBlock.amount);
       }, currentBlock.wait ?? DefaultSetting.ActionBlock.delete.wait);
+
+      break;
+
+    case "function":
+      pack.timeoutTick = window.setTimeout(() => {
+        handleFunction(pack, moveOn, currentBlock.func);
+      }, currentBlock.wait ?? DefaultSetting.ActionBlock.function.wait);
+
+      break;
   }
 };

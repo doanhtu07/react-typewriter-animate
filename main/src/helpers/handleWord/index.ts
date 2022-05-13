@@ -21,6 +21,8 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
     loop
   } = props;
 
+  const isLoop = loop === undefined ? DefaultSetting.loop : loop;
+
   const { current: containerCurrent } = pack.containerRef;
   const { current: contentCurrent } = pack.contentRef;
 
@@ -153,7 +155,7 @@ export const handleWord = (props: ComposedTypewriterProps, pack: PackInfo, moveO
    */
   if (!pack.isDeleting && pack.blockPointer === textBlocks.length) {
     // Check loop and if it is last data to rotate
-    if (!loop && pack.currentDataRotateIndex === pack.copyDataToRotate.length - 1) {
+    if (!isLoop && pack.currentDataRotateIndex === pack.copyDataToRotate.length - 1) {
       return;
     }
 

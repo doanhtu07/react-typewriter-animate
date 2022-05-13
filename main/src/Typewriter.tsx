@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import { DefaultSetting } from "./defaults";
 import { handleAction } from "./helpers/handleAction";
 import { resetPack } from "./helpers/handleLifeCycle";
 import { handleWord } from "./helpers/handleWord";
@@ -12,10 +13,7 @@ export type ComposedTypewriterProps = TypewriterProps;
 // https://css-tricks.com/snippets/css/typewriter-effect/
 
 class Typewriter extends React.Component<ComposedTypewriterProps> {
-  mPack: PackInfo = {
-    containerRef: React.createRef<HTMLSpanElement>(),
-    contentRef: React.createRef<HTMLSpanElement>(),
-
+  mDefaultPackData: Omit<PackInfo, "containerRef" | "contentRef"> = {
     // Since we want to support deleting, we must have a copy data and perform delete on it. We will restore original data after rotate through all data.
     copyDataToRotate: deepCopyData(this.props.dataToRotate),
 
@@ -37,9 +35,37 @@ class Typewriter extends React.Component<ComposedTypewriterProps> {
     timeoutTick: -1 // Remain the same even after reseting
   };
 
+  mPack: PackInfo = {
+    containerRef: React.createRef<HTMLSpanElement>(),
+    contentRef: React.createRef<HTMLSpanElement>(),
+    ...this.mDefaultPackData
+  };
+
   componentDidMount() {
-    blinkCursor(this.props, this.mPack);
-    this.tick();
+    const { start } = this.props;
+
+    const isStart = start === undefined ? DefaultSetting.start : start;
+
+    if (isStart) {
+      blinkCursor(this.props, this.mPack);
+      this.tick();
+    }
+  }
+
+  componentDidUpdate(prevProps: ComposedTypewriterProps) {
+    const { start } = this.props;
+    const { start: prevStart } = prevProps;
+
+    if (!prevStart && start) {
+      // Reset data in pack if start flag is reseted
+      this.mPack = {
+        ...this.mPack,
+        ...this.mDefaultPackData
+      };
+
+      blinkCursor(this.props, this.mPack);
+      this.tick();
+    }
   }
 
   componentWillUnmount() {

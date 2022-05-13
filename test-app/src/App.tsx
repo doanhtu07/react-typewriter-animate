@@ -7,7 +7,8 @@ import "./App.css";
 const styles = {
   root: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
+    flexDirection: "column"
   },
   title: {
     position: "relative",
@@ -19,6 +20,11 @@ const styles = {
     display: "table",
     textAlign: "center"
   },
+  description: {
+    display: "flex",
+    justifyContent: "center"
+  },
+
   blue: {
     color: "blue"
   }
@@ -26,9 +32,18 @@ const styles = {
 
 type Props = WithStylesProps<typeof styles>;
 
-class App extends React.Component<Props> {
+type State = {
+  stStart: boolean;
+};
+
+class App extends React.Component<Props, State> {
+  state: State = {
+    stStart: false
+  };
+
   render() {
     const { classes } = this.props;
+    const { stStart } = this.state;
 
     return (
       <div className={classes.root}>
@@ -37,37 +52,35 @@ class App extends React.Component<Props> {
             loop
             dataToRotate={[
               [
-                { type: "word", text: "A simple" },
+                { type: "word", text: "Here we go!" },
                 {
                   type: "action",
-                  action: "delete",
-                  amount: "simple".length
-                },
-                {
-                  type: "word",
-                  text: "easy-to-use ",
-                  spanClass: classes.blue,
-                  cursorColor: "blue"
-                },
-                {
-                  type: "word",
-                  text: "React Typewriter"
-                }
-              ],
-              [
-                { type: "word", text: "Try it now" },
-                {
-                  type: "word",
-                  text: "...!",
-                  override: {
-                    maxTypespeed: 600
-                  }
+                  action: "function",
+                  func: () => {
+                    console.log("Hello");
+                    this.setState({
+                      stStart: true
+                    });
+                  },
+                  wait: 1000
                 }
               ]
             ]}
-            maxTypeSpeed={150}
-            maxDeleteSpeed={100}
-            timeBeforeDelete={1300}
+          />
+        </h1>
+
+        <h1 className={classes.description}>
+          <Typewriter
+            start={stStart}
+            dataToRotate={[
+              [
+                {
+                  type: "word",
+                  text: "Hello guys!"
+                }
+              ],
+              [{ type: "word", text: "I'm Tu" }]
+            ]}
           />
         </h1>
       </div>
