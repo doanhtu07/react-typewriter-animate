@@ -248,7 +248,7 @@ class Example_Styled_WordBlock extends React.Components {
           dataToRotate={[
             // Banner 1
             [
-              { type: "word", text: "Hello", spanClass: "css-class-name", cursorColor: "blue" },
+              { type: "word", text: "Hello", spanClass: "css-class-name" },
               { type: "word", text: " guys" }
             ],
             // Banner 2
@@ -275,23 +275,22 @@ import "./overwrite.css";
  *  Default styles:
  *
  *  .Typewriter-cursor {
- *     --cursor-color: black;
  *     --cursor-blink-rate: 900ms;
  *
- *     color: var(--cursor-color);
- *     transition: color 0.2s;
+ *     color: inherit;
+ *     transition: all 0.2s;
  *  }
  *
  *  .Typewriter-blink {
- *    animation: Typewriter-blink-keyframe 0.9s step-end infinite;
+ *    animation: Typewriter-blink-keyframe var(--cursor-blink-rate) step-end infinite;
  *  },
  *
  *  @keyframes Typewriter-blink-keyframe {
  *    0% {
- *      color: transparent;
+ *      opacity: 0;
  *    }
  *    50% {
- *      color: var(--cursor-color);
+ *      opacity: 1;
  *    }
  *  }
  */
@@ -345,7 +344,6 @@ class Example_Delete extends React.Components {
                 type: "word",
                 text: "What's up?",
                 spanClass: "css-class-name",
-                cursorColor: "blue",
               },
               { type: "action", action: "delete", amount: "up?".length },
               { type: "word", text: "going on, guys?" },
